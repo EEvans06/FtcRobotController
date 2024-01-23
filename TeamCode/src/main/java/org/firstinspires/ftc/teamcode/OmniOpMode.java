@@ -86,7 +86,7 @@ public class OmniOpMode extends LinearOpMode {
     private Servo topClaw = null;
     private Servo botClaw = null;
 
-     //static final double     COUNTS_PER_MOTOR_REV    = 288;
+    //static final double     COUNTS_PER_MOTOR_REV    = 288;
     //static final double     GEAR_REDUCTION    = 2.7778;
     //static final double     COUNTS_PER_GEAR_REV    = COUNTS_PER_MOTOR_REV * GEAR_REDUCTION;
     //static final double     COUNTS_PER_DEGREE    = COUNTS_PER_GEAR_REV/360;
@@ -98,10 +98,10 @@ public class OmniOpMode extends LinearOpMode {
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_motor");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_motor");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_motor");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_motor");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "motorFrontLeft"); // CH Port: 2
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "motorBackLeft");   // CH Port: 3
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");// CH Port: 0
+        rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");  // CH Port: 1
 
         rightSlide = hardwareMap.get(DcMotor.class, "right_slide");
         leftSlide = hardwareMap.get(DcMotor.class, "left_slide");
@@ -131,21 +131,21 @@ public class OmniOpMode extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         rightSlide.setDirection(DcMotor.Direction.FORWARD);
-        leftSlide.setDirection(DcMotor.Direction.FORWARD);
+        leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
         rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightForebar.setDirection(Servo.Direction.FORWARD);
-        leftForebar.setDirection(Servo.Direction.FORWARD);
+        leftForebar.setDirection(Servo.Direction.REVERSE);
         rightForebar.setPosition(0);
         leftForebar.setPosition(0);
 
-        topClaw.setDirection(Servo.Direction.FORWARD);
-        botClaw.setDirection(Servo.Direction.REVERSE);
+        topClaw.setDirection(Servo.Direction.REVERSE);
+        botClaw.setDirection(Servo.Direction.FORWARD);
         topClaw.setPosition(1);
         botClaw.setPosition(1);
 
@@ -188,11 +188,11 @@ public class OmniOpMode extends LinearOpMode {
             }
 
             // Arm control
-            if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up || gamepad2.dpad_up) {
                 leftSlide.setPower(0.5);
                 rightSlide.setPower(0.5);
             }
-            else if (gamepad1.dpad_down) {
+            else if (gamepad1.dpad_down || gamepad2.dpad_down) {
                 leftSlide.setPower(-0.5);
                 rightSlide.setPower(-0.5);
             }
@@ -202,13 +202,13 @@ public class OmniOpMode extends LinearOpMode {
             }
 
             // Forebar control
-            if (gamepad1.dpad_down || gamepad2.right_bumper) {
+            if (gamepad1.dpad_right || gamepad2.left_bumper) {
                 leftForebar.setPosition(0.0);
                 rightForebar.setPosition(0.0);
             }
-            else if (gamepad1.dpad_up || gamepad2.left_bumper) {
-                leftForebar.setPosition(0.80);
-                rightForebar.setPosition(0.80);
+            else if (gamepad1.dpad_left || gamepad2.right_bumper) {
+                leftForebar.setPosition(0.65);
+                rightForebar.setPosition(0.65);
             }
 
             // Claw control
@@ -217,14 +217,14 @@ public class OmniOpMode extends LinearOpMode {
                 topClaw.setPosition(1.0);
             }
             else if (gamepad1.b || gamepad2.b) {
-                botClaw.setPosition(0.74);
-                topClaw.setPosition(0.76);
+                botClaw.setPosition(0.80);
+                topClaw.setPosition(0.80);
             }
             else if (gamepad1.a || gamepad2.a) {
-                botClaw.setPosition(1.0);
+                botClaw.setPosition(1);
             }
             else if (gamepad1.y || gamepad2.y) {
-                topClaw.setPosition(1.0);
+                topClaw.setPosition(1);
             }
 
             // Send calculated power to wheels
