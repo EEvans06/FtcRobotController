@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 /*
  * This file contains an example of a Linear "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -90,7 +91,6 @@ public class OmniOpMode extends LinearOpMode {
     //static final double     GEAR_REDUCTION    = 2.7778;
     //static final double     COUNTS_PER_GEAR_REV    = COUNTS_PER_MOTOR_REV * GEAR_REDUCTION;
     //static final double     COUNTS_PER_DEGREE    = COUNTS_PER_GEAR_REV/360;
-
 
 
     @Override
@@ -152,6 +152,8 @@ public class OmniOpMode extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+
 
         waitForStart();
         runtime.reset();
@@ -257,4 +259,8 @@ public class OmniOpMode extends LinearOpMode {
             //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.update();
         }
-    }}
+    }
+
+
+
+}
