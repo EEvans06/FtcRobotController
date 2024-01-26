@@ -280,7 +280,7 @@ public class BlueAutonAud extends LinearOpMode {
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
 
-    static class YellowBlobDetectionPipeline extends OpenCvPipeline {
+     class YellowBlobDetectionPipeline extends OpenCvPipeline {
         Mat hierarchy = new Mat();
         Mat hsvFrame = new Mat();
         Mat yellowMask = new Mat();
@@ -326,19 +326,20 @@ public class BlueAutonAud extends LinearOpMode {
         }
 
         private Mat preprocessFrame(Mat frame) {
-//            Mat hsvFrame = new Mat();
+            //Mat hsvFrame = new Mat();
             Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
 
-            Scalar lowerBlue = new Scalar(110, 50, 50);
-            Scalar upperBlue = new Scalar(130, 225, 225);
+            Scalar lowerYellow = new Scalar(150, 125, 70);
+            Scalar upperYellow  = new Scalar(170, 70, 30);
+//           49, 62, 82
+//            5, 104, 245
+//
+            //Mat yellowMask = new Mat();
+            Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
 
-
-//            Mat yellowMask = new Mat();
-            Core.inRange(hsvFrame, lowerBlue, upperBlue, yellowMask);
-
-            Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+            Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(10, 10));
             Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_OPEN, kernel);
-            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_CLOSE, kernel);
+            //Imgproc.morphologyEx(blueMask, blueMask, Imgproc.MORPH_CLOSE, kernel);
 
             return yellowMask;
         }

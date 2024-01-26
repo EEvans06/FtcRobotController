@@ -119,7 +119,7 @@ public class RedAuton extends LinearOpMode {
 
     // Calculate the distance using the formula
     public static final double objectWidthInRealWorldUnits = 3.25;  // Replace with the actual width of the object in real-world units
-    public static final double focalLength = 1395.27;  // Replace with the focal length of the camera in pixels
+    public static final double focalLength = 1473.23;  // Replace with the focal length of the camera in pixels
     /********************/
 //1444.5
 
@@ -273,7 +273,7 @@ public class RedAuton extends LinearOpMode {
         controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        controlHubCam.setPipeline(new BlueAutonAud.YellowBlobDetectionPipeline());
+        controlHubCam.setPipeline(new RedAuton.YellowBlobDetectionPipeline());
 
         controlHubCam.openCameraDevice();
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
@@ -365,5 +365,13 @@ public class RedAuton extends LinearOpMode {
     private static double getDistance(double width){
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
         return distance;
+    }
+    //if (37'<"distance"<'39){
+    //encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
+    //encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+    //encoderDrive(TURN_SPEED,   25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+    //encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+
+
     }
 }
