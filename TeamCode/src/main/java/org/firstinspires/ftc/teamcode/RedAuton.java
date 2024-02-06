@@ -81,7 +81,7 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Red Side Autonomous", group="Robot")
+@Autonomous(name="RedAuton", group="Robot")
 //@Disabled
 public class RedAuton extends LinearOpMode {
 
@@ -99,8 +99,8 @@ public class RedAuton extends LinearOpMode {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 0.25 ;     // 20:1 gear ratio.
+    static final double     COUNTS_PER_MOTOR_REV    = 28 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 20 ;     // 20:1 gear ratio.
     static final double     WHEEL_DIAMETER_INCHES   = 3.77953 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -112,13 +112,14 @@ public class RedAuton extends LinearOpMode {
     double cX = 0;
     double cY = 0;
     double width = 0;
+    double distance = getDistance(width);
 
     private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
     private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
     private static final int CAMERA_HEIGHT = 720 ; // height of wanted camera resolution
 
     // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.25;  // Replace with the actual width of the object in real-world units
+    public static final double objectWidthInRealWorldUnits = 3.25                ;  // Replace with the actual width of the object in real-world units
     public static final double focalLength = 1473.23;  // Replace with the focal length of the camera in pixels
     /********************/
 //1444.5
@@ -171,12 +172,29 @@ public class RedAuton extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        while (opModeIsActive()) {
+            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+            telemetry.addData("Distance in Inch", (distance));
+            telemetry.update();
+        }
+
+        if(distance > 10)
+
+        {
+            encoderDrive(DRIVE_SPEED, distance, distance, distance, distance, 10);
+//
+//            encoderDrive(DRIVE_SPEED, 33, 33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
+//            encoderDrive(DRIVE_SPEED, -25, -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//            encoderDrive(TURN_SPEED, 25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+//            encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        }
+
+//        // Step through each leg of the path,
+//        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+//        encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
+//        encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//        encoderDrive(TURN_SPEED,   25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+//        encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -374,4 +392,4 @@ public class RedAuton extends LinearOpMode {
 
 
     }
-}
+
