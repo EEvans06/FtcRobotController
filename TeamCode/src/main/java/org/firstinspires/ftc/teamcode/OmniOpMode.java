@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -81,8 +82,8 @@ public class OmniOpMode extends LinearOpMode {
     private DcMotor rightSlide = null;
     private DcMotor leftSlide = null;
 
-    private Servo rightForebar = null;
-    private Servo leftForebar = null;
+    private DcMotor forebar = null;
+//    private Servo leftForebar = null;
 
     private Servo topClaw = null;
     private Servo botClaw = null;
@@ -96,23 +97,36 @@ public class OmniOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+
+
+
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "motorFrontLeft"); // CH Port: 2
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "motorBackLeft");   // CH Port: 3
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");// CH Port: 0
-        rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");  // CH Port: 1
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "motorFrontLeft"); // EH Port: 2
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "motorBackLeft");   // EH Port: 3
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");// CH Port: 1
+        rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");  // CH Port: 3
 
-        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");
-        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");
+        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
 
-        rightForebar = hardwareMap.get(Servo.class, "right_forebar");   // CH Port 0
-        leftForebar = hardwareMap.get(Servo.class, "left_forebar");   // CH Port 5
+        forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
+//        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class,"top_claw");   // CH Port 3
-        botClaw = hardwareMap.get(Servo.class,"bottom_claw");   // CH Port 4
+        topClaw = hardwareMap.get(Servo.class,"top_claw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class,"bottom_claw");   // EH Port: 3
 
+        forebar.setDirection(DcMotor.Direction.FORWARD);
 
+        forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.addData("Starting at", forebar.getCurrentPosition());
+
+        telemetry.update();
         //int maxPosition = (int)(COUNTS_PER_DEGREE *45);
 
         // ########################################################################################
@@ -139,15 +153,20 @@ public class OmniOpMode extends LinearOpMode {
         rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightForebar.setDirection(Servo.Direction.FORWARD);
-        leftForebar.setDirection(Servo.Direction.REVERSE);
-        rightForebar.setPosition(0);
-        leftForebar.setPosition(0);
+        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+//        forebar.setDirection(DcMotor.Direction.FORWARD);
+//        forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        forebar.setPower(.5);
+//        leftForebar.setDirection(Servo.Direction.REVERSE);
+//        rightForebar.setPosition(0);
+//        leftForebar.setPosition(0);
 
         topClaw.setDirection(Servo.Direction.REVERSE);
         botClaw.setDirection(Servo.Direction.FORWARD);
-        topClaw.setPosition(1);
-        botClaw.setPosition(1);
+        topClaw.setPosition(.8);
+        botClaw.setPosition(.8);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -204,28 +223,71 @@ public class OmniOpMode extends LinearOpMode {
             }
 
             // Forebar control
-            if (gamepad1.dpad_right || gamepad2.left_bumper) {
-                leftForebar.setPosition(0.0);
-                rightForebar.setPosition(0.0);
+            if (gamepad2.dpad_right) {
+//                forebar.setTargetPosition(forebar.getCurrentPosition() - 0.04  );
+//                leftForebar.setPosition(0.0);
+//                rightForebar.setPosition(0.0);
+//                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+//                forebar.setPower(.5);
+                forebar.setTargetPosition(660);
+                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                forebar.setPower(0.3);
+                while (opModeIsActive() && forebar.isBusy()) {
+                    telemetry.addLine("moving forebare");
+                    telemetry.update();
+                }
+                forebar.setPower(0);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             }
-            else if (gamepad1.dpad_left || gamepad2.right_bumper) {
-                leftForebar.setPosition(0.65);
-                rightForebar.setPosition(0.65);
+            else if (gamepad2.dpad_left ) {
+
+//                forebar.setDirection(DcMotorSimple.Direction.FORWARD);
+//                forebar.setPower(.5);
+                forebar.setTargetPosition(0);
+                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                forebar.setPower(0.2);
+                while (opModeIsActive() && forebar.isBusy()) {
+                    telemetry.addLine("moving forebar");
+                    telemetry.update();
+                }
+                forebar.setPower(0);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
+            else if (gamepad2.left_bumper){
+                    forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+                    forebar.setPower(.5);
+            }
+            else if (gamepad2.right_bumper){
+                    forebar.setDirection(DcMotorSimple.Direction.FORWARD);
+                    forebar.setPower(.5);
+            }
+            else
+            {
+                forebar.setPower(0);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                telemetry.addData("Current Position:  ", forebar.getCurrentPosition());
+
+                telemetry.update();
             }
 
             // Claw control
-            if (gamepad1.x || gamepad2.x) {
-                botClaw.setPosition(1.0);
-                topClaw.setPosition(1.0);
+            if (gamepad2.x) {
+                botClaw.setPosition(1);
+                topClaw.setPosition(1);
             }
-            else if (gamepad1.b || gamepad2.b) {
-                botClaw.setPosition(0.80);
-                topClaw.setPosition(0.80);
+            else if (gamepad2.b) {
+                botClaw.setPosition(.8);
+                topClaw.setPosition(.8);
             }
-            else if (gamepad1.a || gamepad2.a) {
+            else if (gamepad2.y) {
                 botClaw.setPosition(1);
             }
-            else if (gamepad1.y || gamepad2.y) {
+            else if (gamepad2.a) {
                 topClaw.setPosition(1);
             }
 

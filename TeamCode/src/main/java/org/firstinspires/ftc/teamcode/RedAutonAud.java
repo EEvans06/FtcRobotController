@@ -79,8 +79,8 @@ public class RedAutonAud extends LinearOpMode {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 0.25 ;     // 20:1 gear ratio.
+    static final double     COUNTS_PER_MOTOR_REV    = 28 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 20  ;     // 20:1 gear ratio.
     static final double     WHEEL_DIAMETER_INCHES   = 3.77953 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -127,8 +127,12 @@ public class RedAutonAud extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  21,  21, 21, 21, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+//        encoderDrive(DRIVE_SPEED,  -19,  -19, -19, -19, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//        sleep(5000);
+//        encoderDrive(DRIVE_SPEED,  85,  -85, -85, 85, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//        encoderDrive(DRIVE_SPEED,  -5,  -5, -5, -5, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout        //encoderDrive(DRIVE_SPEED, 50, 50, 50, 50, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+
         //encoderDrive(TURN_SPEED,   -7, 7, -7, 7, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
         //encoderDrive(DRIVE_SPEED, 10, 10, 10, 10, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 

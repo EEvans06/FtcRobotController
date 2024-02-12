@@ -86,12 +86,13 @@ import java.util.List;
 public class RedAuton extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private DcMotor         leftFrontDrive   = null;
-    private DcMotor         rightFrontDrive  = null;
-    private DcMotor         leftBackDrive   = null;
-    private DcMotor         rightBackDrive  = null;
+    private DcMotor leftFrontDrive = null;
+    private DcMotor rightFrontDrive = null;
+    private DcMotor leftBackDrive = null;
+    private DcMotor rightBackDrive = null;
 
-    private ElapsedTime     runtime = new ElapsedTime();
+
+    private ElapsedTime runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -99,29 +100,29 @@ public class RedAuton extends LinearOpMode {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 28 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 20 ;     // 20:1 gear ratio.
-    static final double     WHEEL_DIAMETER_INCHES   = 3.77953 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV = 28;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 20;     // 20:1 gear ratio.
+    static final double WHEEL_DIAMETER_INCHES = 3.77953;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
 
 
-    /********** Copied Code **********/
-    double cX = 0;
-    double cY = 0;
-    double width = 0;
-    double distance = getDistance(width);
+//    /********** Copied Code **********/
+//    double cX = 0;
+//    double cY = 0;
+//    double width = 0;
+//    double distance = getDistance(width);
 
-    private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
-    private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
-    private static final int CAMERA_HEIGHT = 720 ; // height of wanted camera resolution
-
-    // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.25                ;  // Replace with the actual width of the object in real-world units
-    public static final double focalLength = 1473.23;  // Replace with the focal length of the camera in pixels
-    /********************/
+//    private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
+//    private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
+//    private static final int CAMERA_HEIGHT = 720 ; // height of wanted camera resolution
+//
+//    // Calculate the distance using the formula
+//    public static final double objectWidthInRealWorldUnits = 3.25                ;  // Replace with the actual width of the object in real-world units
+//    public static final double focalLength = 1473.23;  // Replace with the focal length of the camera in pixels
+//    /********************/
 //1444.5
 
 
@@ -129,19 +130,18 @@ public class RedAuton extends LinearOpMode {
     public void runOpMode() {
 
         /*********   Copied Code ******/
-        initOpenCV();
+//        initOpenCV();
 //        FtcDashboard dashboard = FtcDashboard.getInstance();
 //        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 //        FtcDashboard.getInstance().startCameraStream(controlHubCam, 30);
         /*******   Copied Code ******/
 
 
-
         // Initialize the drive system variables.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "motorFrontLeft");
-        rightFrontDrive  = hardwareMap.get(DcMotor.class, "motorFrontRight");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "motorBackLeft");
-        rightBackDrive  = hardwareMap.get(DcMotor.class, "motorBackRight");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontLeft");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -162,7 +162,7 @@ public class RedAuton extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Starting at",  "%7d :%7d",
+        telemetry.addData("Starting at", "%7d :%7d",
                 leftFrontDrive.getCurrentPosition(),
                 rightFrontDrive.getCurrentPosition(),
                 leftBackDrive.getCurrentPosition(),
@@ -172,29 +172,29 @@ public class RedAuton extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        while (opModeIsActive()) {
-            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
-            telemetry.addData("Distance in Inch", (distance));
-            telemetry.update();
-        }
+//        while (opModeIsActive()) {
+//            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+//            telemetry.addData("Distance in Inch", (distance));
+//            telemetry.update();
+//        }
 
-        if(distance > 10)
-
-        {
-            encoderDrive(DRIVE_SPEED, distance, distance, distance, distance, 10);
+//        if(distance > 10)
 //
-//            encoderDrive(DRIVE_SPEED, 33, 33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
-//            encoderDrive(DRIVE_SPEED, -25, -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-//            encoderDrive(TURN_SPEED, 25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-//            encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
-        }
+//        {
+//            encoderDrive(DRIVE_SPEED, distance, distance, distance, distance, 10);
+////
+////            encoderDrive(DRIVE_SPEED, 33, 33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
+////            encoderDrive(DRIVE_SPEED, -25, -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+////            encoderDrive(TURN_SPEED, 25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+////            encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+//        }
 
-//        // Step through each leg of the path,
-//        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-//        encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
-//        encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-//        encoderDrive(TURN_SPEED,   25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-//        encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        // Step through each leg of the path,
+        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+        encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -222,10 +222,10 @@ public class RedAuton extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftFrontInches * COUNTS_PER_INCH);
-            newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
-            newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
-            newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
+            newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int) (leftFrontInches * COUNTS_PER_INCH);
+            newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int) (rightFrontInches * COUNTS_PER_INCH);
+            newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int) (leftBackInches * COUNTS_PER_INCH);
+            newRightBackTarget = rightBackDrive.getCurrentPosition() + (int) (rightBackInches * COUNTS_PER_INCH);
             leftFrontDrive.setTargetPosition(newLeftFrontTarget);
             rightFrontDrive.setTargetPosition(newRightFrontTarget);
             leftBackDrive.setTargetPosition(newLeftBackTarget);
@@ -256,10 +256,10 @@ public class RedAuton extends LinearOpMode {
                             leftBackDrive.isBusy() && rightBackDrive.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to",  " %7d :%7d",
-                        newLeftFrontTarget,  newRightFrontTarget,
-                        newLeftBackTarget,  newRightBackTarget);
-                telemetry.addData("Currently at",  " at %7d :%7d",
+                telemetry.addData("Running to", " %7d :%7d",
+                        newLeftFrontTarget, newRightFrontTarget,
+                        newLeftBackTarget, newRightBackTarget);
+                telemetry.addData("Currently at", " at %7d :%7d",
                         leftFrontDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(),
                         leftBackDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
                 telemetry.update();
@@ -280,116 +280,7 @@ public class RedAuton extends LinearOpMode {
             sleep(250);   // optional pause after each move.
         }
     }
-    /*********** Copied Method ***********/
-    private void initOpenCV() {
-
-        // Create an instance of the camera
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-        // Use OpenCvCameraFactory class from FTC SDK to create camera instance
-        controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        controlHubCam.setPipeline(new RedAuton.YellowBlobDetectionPipeline());
-
-        controlHubCam.openCameraDevice();
-        controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-    }
-
-    class YellowBlobDetectionPipeline extends OpenCvPipeline {
-        Mat hierarchy = new Mat();
-        Mat hsvFrame = new Mat();
-        Mat yellowMask = new Mat();
-        @Override
-        public Mat processFrame(Mat input) {
-            // Preprocess the frame to detect yellow regions
-            Mat yellowMask = preprocessFrame(input);
-
-            // Find contours of the detected yellow regions
-            List<MatOfPoint> contours = new ArrayList<>();
-//            Mat hierarchy = new Mat();
-
-            Imgproc.findContours(yellowMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
-            // Find the largest yellow contour (blob)
-            MatOfPoint largestContour = findLargestContour(contours);
-
-            if (largestContour != null) {
-                // Draw a red outline around the largest detected object
-                Imgproc.drawContours(input, contours, contours.indexOf(largestContour), new Scalar(255, 0, 0), 2);
-                // Calculate the width of the bounding box
-                width = calculateWidth(largestContour);
-
-                // Display the width next to the label
-                String widthLabel = "Width: " + (int) width + " pixels";
-                Imgproc.putText(input, widthLabel, new Point(cX + 10, cY + 20), Imgproc.FONT_HERSHEY_SIMPLEX, 1.5, new Scalar(0, 255, 0), 2);
-                //Display the Distance
-                String distanceLabel = "Distance: " + String.format("%.2f", getDistance(width)) + " inches";
-                Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 1.5, new Scalar(0, 255, 0), 2);
-                // Calculate the centroid of the largest contour
-                Moments moments = Imgproc.moments(largestContour);
-                cX = moments.get_m10() / moments.get_m00();
-                cY = moments.get_m01() / moments.get_m00();
-
-                // Draw a dot at the centroid
-                String label = "(" + (int) cX + ", " + (int) cY + ")";
-                Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 1.5, new Scalar(0, 255, 0), 2);
-                Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
-
-            }
-
-            return input;
-        }
-
-        private Mat preprocessFrame(Mat frame) {
-//            Mat hsvFrame = new Mat();
-            Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
-
-            Scalar lowerYellow = new Scalar(100, 100, 100);
-            Scalar upperYellow = new Scalar(180, 255, 255);
 
 
-//            Mat yellowMask = new Mat();
-            Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
-
-            Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_OPEN, kernel);
-            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_CLOSE, kernel);
-
-            return yellowMask;
-        }
-
-        private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
-            double maxArea = 0;
-            MatOfPoint largestContour = null;
-
-            for (MatOfPoint contour : contours) {
-                double area = Imgproc.contourArea(contour);
-                if (area > maxArea) {
-                    maxArea = area;
-                    largestContour = contour;
-                }
-            }
-
-            return largestContour;
-        }
-        private double calculateWidth(MatOfPoint contour) {
-            Rect boundingRect = Imgproc.boundingRect(contour);
-            return boundingRect.width;
-        }
-
-    }
-    private static double getDistance(double width){
-        double distance = (objectWidthInRealWorldUnits * focalLength) / width;
-        return distance;
-    }
-    //if (37'<"distance"<'39){
-    //encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
-    //encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-    //encoderDrive(TURN_SPEED,   25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-    //encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
-
-
-    }
+}
 
