@@ -81,7 +81,7 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="RedAuton", group="Robot")
+@Autonomous(name="Red Side Autonomous", group="Robot")
 //@Disabled
 public class RedAuton extends LinearOpMode {
 
@@ -191,10 +191,10 @@ public class RedAuton extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  33,  33, 33, 33, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  23,  23, 23, 23, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  -0,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//        encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, 35, -35, -35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
