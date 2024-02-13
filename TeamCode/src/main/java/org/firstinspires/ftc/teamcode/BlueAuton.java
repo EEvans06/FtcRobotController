@@ -127,10 +127,10 @@ public class BlueAuton extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  34,  34, 34, 34, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -25,  -25, -25, -25, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   -25, 25, -25, 25, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, 40, 40, 40, 40, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  23,  23, 23, 23, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//        encoderDrive(TURN_SPEED,   -25, 25, -25, 25, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, -35, 35, 35, -35, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
