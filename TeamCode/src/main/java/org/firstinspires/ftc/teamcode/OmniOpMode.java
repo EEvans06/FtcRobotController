@@ -229,7 +229,7 @@ public class OmniOpMode extends LinearOpMode {
 //                rightForebar.setPosition(0.0);
 //                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 forebar.setDirection(DcMotorSimple.Direction.FORWARD);
-                forebar.setPower(.5);
+                forebar.setPower(.3);
 //                forebar.setTargetPosition(660);
 //                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                forebar.setPower(0.3);
@@ -245,7 +245,7 @@ public class OmniOpMode extends LinearOpMode {
             else if (gamepad2.dpad_left) {
 
                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
-                forebar.setPower(.5);
+                forebar.setPower(.3);
 //                forebar.setTargetPosition(0);
 //                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                forebar.setPower(0.2);
@@ -254,6 +254,10 @@ public class OmniOpMode extends LinearOpMode {
 //                    telemetry.update();
 //                }
 //                forebar.setPower(0);
+                if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+                    topClaw.setPosition(.8);
+                    botClaw.setPosition(.8);
+                }
                 forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             }
@@ -261,6 +265,11 @@ public class OmniOpMode extends LinearOpMode {
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
                 forebar.setPower(.5);
+                if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+                    topClaw.setPosition(.8);
+                    botClaw.setPosition(.8);
+                }
+
             }
             else if (gamepad2.right_bumper || gamepad1.dpad_right){
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
