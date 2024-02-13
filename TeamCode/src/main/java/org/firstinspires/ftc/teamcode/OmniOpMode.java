@@ -228,8 +228,8 @@ public class OmniOpMode extends LinearOpMode {
 //                leftForebar.setPosition(0.0);
 //                rightForebar.setPosition(0.0);
 //                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
-//                forebar.setPower(.5);
+                forebar.setDirection(DcMotorSimple.Direction.FORWARD);
+                forebar.setPower(.5);
 //                forebar.setTargetPosition(660);
 //                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                forebar.setPower(0.3);
@@ -237,15 +237,15 @@ public class OmniOpMode extends LinearOpMode {
 //                    telemetry.addLine("moving forebar");
 //                    telemetry.update();
 //                }
-                forebar.setPower(0);
-                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                forebar.setPower(0);
+                forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             }
-            else if (gamepad2.dpad_left  && forebar.getCurrentPosition() > 0) {
+            else if (gamepad2.dpad_left) {
 
-//                forebar.setDirection(DcMotorSimple.Direction.FORWARD);
-//                forebar.setPower(.5);
+                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+                forebar.setPower(.5);
 //                forebar.setTargetPosition(0);
 //                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                forebar.setPower(0.2);
@@ -253,8 +253,8 @@ public class OmniOpMode extends LinearOpMode {
 //                    telemetry.addLine("moving forebar");
 //                    telemetry.update();
 //                }
-                forebar.setPower(0);
-                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                forebar.setPower(0);
+                forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             }
             else if (gamepad2.left_bumper || gamepad1.dpad_left){
@@ -318,8 +318,9 @@ public class OmniOpMode extends LinearOpMode {
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Left Slide Position", leftSlide.getCurrentPosition());
-            telemetry.addData("Right Slide Position", rightSlide.getCurrentPosition());
+            telemetry.addData("Forebar Motor:", forebar.getCurrentPosition());
+//            telemetry.addData("Left Slide Position", leftSlide.getCurrentPosition());
+//            telemetry.addData("Right Slide Position", rightSlide.getCurrentPosition());
             //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.update();
         }
