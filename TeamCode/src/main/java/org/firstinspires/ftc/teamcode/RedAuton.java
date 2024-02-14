@@ -216,15 +216,17 @@ public class RedAuton extends LinearOpMode {
 ////            encoderDrive(TURN_SPEED, 25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 ////            encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 //        }
-        leftSlide.setPower(.3);
-        rightSlide.setPower(.3);
+//        leftSlide.setPower(1);
+//        rightSlide.setPower(1);
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 //        encoderDrive(DRIVE_SPEED,  18,  18, 18, 18, 0, 0, 0, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 //        encoderDrive(TURN_SPEED,   18, -18, 18, -18, 0, 0, 0,  8.0); //        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
 //        encoderDrive(DRIVE_SPEED,  22,  22, 22, 22, 0, 0, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 70, 70, 40,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 100, 100, 100,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+
+//        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 600, 600, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 
 
 // encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
@@ -246,16 +248,13 @@ public class RedAuton extends LinearOpMode {
     public void encoderDrive(double speed,
                              double leftFrontInches, double rightFrontInches,
                              double leftBackInches, double rightBackInches,
-                             double leftSlideInches, double rightSlideInches,
-                             double forebarInches,
+                             int leftEncoder, int rightEncoder,
+                             int forebarEncoder,
                              double timeoutS) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
         int newRightBackTarget;
-        int newLeftSlideTarget;
-        int newrightSlideTarget;
-        int newForebarTarget;
 
 
         // Ensure that the OpMode is still active
@@ -266,17 +265,17 @@ public class RedAuton extends LinearOpMode {
             newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int) (rightFrontInches * COUNTS_PER_INCH);
             newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int) (leftBackInches * COUNTS_PER_INCH);
             newRightBackTarget = rightBackDrive.getCurrentPosition() + (int) (rightBackInches * COUNTS_PER_INCH);
-            newLeftSlideTarget = leftSlide.getCurrentPosition() + (int) (leftSlideInches * COUNTS_PER_INCH);
-            newrightSlideTarget = rightSlide.getCurrentPosition() + (int) (rightSlideInches * COUNTS_PER_INCH);
-            newForebarTarget = forebar.getCurrentPosition() + (int) (forebarInches * COUNTS_PER_INCH);
+//            newLeftSlideTarget = leftSlide.getCurrentPosition() + (int) (leftSlideInches * COUNTS_PER_INCH);
+//            newrightSlideTarget = rightSlide.getCurrentPosition() + (int) (rightSlideInches * COUNTS_PER_INCH);
+//            newForebarTarget = forebar.getCurrentPosition() + (int) (forebarInches * COUNTS_PER_INCH);
 
             leftFrontDrive.setTargetPosition(newLeftFrontTarget);
             rightFrontDrive.setTargetPosition(newRightFrontTarget);
             leftBackDrive.setTargetPosition(newLeftBackTarget);
             rightBackDrive.setTargetPosition(newRightBackTarget);
-            leftSlide.setTargetPosition(newLeftSlideTarget);
-            rightSlide.setTargetPosition(newrightSlideTarget);
-            forebar.setTargetPosition(newForebarTarget);
+            leftSlide.setTargetPosition(leftEncoder);
+            rightSlide.setTargetPosition(rightEncoder);
+            forebar.setTargetPosition(forebarEncoder);
 
             // Turn On RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
