@@ -345,6 +345,17 @@ public class OmniOpMode extends LinearOpMode {
                     topClaw.setPosition(1);
                 }
 
+                ////Reset encoder////
+            if (gamepad2.right_trigger != 0) {
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+
                 // Send calculated power to wheels
                 if (gamepad1.left_bumper) {
                     // Slows robot down
@@ -366,12 +377,15 @@ public class OmniOpMode extends LinearOpMode {
                     rightBackDrive.setPower(rightBackPower / 1.5);
                 }
 
-                // Show the elapsed game time and wheel power.
+                // Show the elapsed game time and wheel power
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
-                telemetry.addData("Forebar Motor:", forebar.getCurrentPosition());
+                telemetry.addData("Forebar Position", forebar.getCurrentPosition());
+                telemetry.addData("leftSlide Position", leftSlide.getCurrentPosition());
+                telemetry.addData("rightSlide Position", rightSlide.getCurrentPosition());
+
 //            telemetry.addData("Left Slide Position", leftSlide.getCurrentPosition());
 //            telemetry.addData("Right Slide Position", rightSlide.getCurrentPosition());
-                //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+                telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
                 telemetry.update();
 
         }

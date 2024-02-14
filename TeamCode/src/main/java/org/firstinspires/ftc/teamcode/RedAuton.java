@@ -224,8 +224,8 @@ public class RedAuton extends LinearOpMode {
 //        encoderDrive(DRIVE_SPEED,  18,  18, 18, 18, 0, 0, 0, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 //        encoderDrive(TURN_SPEED,   18, -18, 18, -18, 0, 0, 0,  8.0); //        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
 //        encoderDrive(DRIVE_SPEED,  22,  22, 22, 22, 0, 0, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 100, 100, 100,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-
+        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 925, 943, -696,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+//      1822, 1871, 863
 //        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 600, 600, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 
 
