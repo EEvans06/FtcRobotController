@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -91,6 +93,14 @@ public class RedAuton extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightBackDrive = null;
 
+    private DcMotor rightSlide = null;
+    private DcMotor leftSlide = null;
+
+    private DcMotor forebar = null;
+//    private Servo leftForebar = null;
+
+    private Servo topClaw = null;
+    private Servo botClaw = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -143,6 +153,14 @@ public class RedAuton extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");
 
+        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
+
+        forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
+//        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
+
+        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -150,16 +168,26 @@ public class RedAuton extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightSlide.setDirection(DcMotor.Direction.FORWARD);
+        leftSlide.setDirection(DcMotor.Direction.REVERSE);
+        forebar.setDirection(DcMotor.Direction.FORWARD);
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Starting at", "%7d :%7d",
@@ -188,13 +216,19 @@ public class RedAuton extends LinearOpMode {
 ////            encoderDrive(TURN_SPEED, 25, -25, 25, -25, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 ////            encoderDrive(DRIVE_SPEED, 35, 35, 35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 //        }
+        leftSlide.setPower(.3);
+        rightSlide.setPower(.3);
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  23,  23, 23, 23, 10.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-//        encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, 35, -35, -35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+//        encoderDrive(DRIVE_SPEED,  18,  18, 18, 18, 0, 0, 0, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+//        encoderDrive(TURN_SPEED,   18, -18, 18, -18, 0, 0, 0,  8.0); //        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+//        encoderDrive(DRIVE_SPEED,  22,  22, 22, 22, 0, 0, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 70, 70, 40,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+
+
+// encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+//        encoderDrive(DRIVE_SPEED, 35, -35, -35, 35, 8.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -212,11 +246,17 @@ public class RedAuton extends LinearOpMode {
     public void encoderDrive(double speed,
                              double leftFrontInches, double rightFrontInches,
                              double leftBackInches, double rightBackInches,
+                             double leftSlideInches, double rightSlideInches,
+                             double forebarInches,
                              double timeoutS) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
         int newRightBackTarget;
+        int newLeftSlideTarget;
+        int newrightSlideTarget;
+        int newForebarTarget;
+
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
@@ -226,16 +266,26 @@ public class RedAuton extends LinearOpMode {
             newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int) (rightFrontInches * COUNTS_PER_INCH);
             newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int) (leftBackInches * COUNTS_PER_INCH);
             newRightBackTarget = rightBackDrive.getCurrentPosition() + (int) (rightBackInches * COUNTS_PER_INCH);
+            newLeftSlideTarget = leftSlide.getCurrentPosition() + (int) (leftSlideInches * COUNTS_PER_INCH);
+            newrightSlideTarget = rightSlide.getCurrentPosition() + (int) (rightSlideInches * COUNTS_PER_INCH);
+            newForebarTarget = forebar.getCurrentPosition() + (int) (forebarInches * COUNTS_PER_INCH);
+
             leftFrontDrive.setTargetPosition(newLeftFrontTarget);
             rightFrontDrive.setTargetPosition(newRightFrontTarget);
             leftBackDrive.setTargetPosition(newLeftBackTarget);
             rightBackDrive.setTargetPosition(newRightBackTarget);
+            leftSlide.setTargetPosition(newLeftSlideTarget);
+            rightSlide.setTargetPosition(newrightSlideTarget);
+            forebar.setTargetPosition(newForebarTarget);
 
             // Turn On RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -243,6 +293,9 @@ public class RedAuton extends LinearOpMode {
             rightFrontDrive.setPower(Math.abs(speed));
             leftBackDrive.setPower(Math.abs(speed));
             rightBackDrive.setPower(Math.abs(speed));
+            leftSlide.setPower(Math.abs(speed));
+            rightSlide.setPower(Math.abs(speed));
+            forebar.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -270,12 +323,18 @@ public class RedAuton extends LinearOpMode {
             rightFrontDrive.setPower(0);
             leftBackDrive.setPower(0);
             rightBackDrive.setPower(0);
+            leftSlide.setPower(0);
+            rightSlide.setPower(0);
+            forebar.setPower(0);
 
             // Turn off RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
         }

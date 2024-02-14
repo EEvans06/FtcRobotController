@@ -127,12 +127,12 @@ public class RedAutonAud extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  21,  21, 21, 21, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -19,  -19, -19, -19, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  18,  18, 18, 18, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  -21,  -21, -21, -21, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  2,  2, 2, 2, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
         sleep(5000);
-        encoderDrive(DRIVE_SPEED,  85,  -85, -85, 85, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  -5,  -5, -5, -5, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-//        encoderDrive(DRIVE_SPEED, 50, 50, 50, 50, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  85,  -85,  -85, 85, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  -5,  -5, -5, -5, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout        //encoderDrive(DRIVE_SPEED, 50, 50, 50, 50, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
 //        encoderDrive(TURN_SPEED,   -7, 7, -7, 7, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 //        encoderDrive(DRIVE_SPEED, 10, 10, 10, 10, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
