@@ -88,6 +88,8 @@ public class OmniOpMode extends LinearOpMode {
     private Servo topClaw = null;
     private Servo botClaw = null;
 
+    double motorMode = 0;
+
     //static final double     COUNTS_PER_MOTOR_REV    = 288;
     //static final double     GEAR_REDUCTION    = 2.7778;
     //static final double     COUNTS_PER_GEAR_REV    = COUNTS_PER_MOTOR_REV * GEAR_REDUCTION;
@@ -98,12 +100,10 @@ public class OmniOpMode extends LinearOpMode {
     public void runOpMode() {
 
 
-
-
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "motorFrontLeft"); // EH Port: 2
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "motorBackLeft");   // EH Port: 3
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontLeft"); // EH Port: 2
+        leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");   // EH Port: 3
         rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");// CH Port: 1
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");  // CH Port: 3
 
@@ -113,8 +113,8 @@ public class OmniOpMode extends LinearOpMode {
         forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
 //        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class,"top_claw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class,"bottom_claw");   // EH Port: 3
+        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
 
         forebar.setDirection(DcMotor.Direction.FORWARD);
 
@@ -173,7 +173,6 @@ public class OmniOpMode extends LinearOpMode {
         telemetry.update();
 
 
-
         waitForStart();
         runtime.reset();
 
@@ -182,18 +181,39 @@ public class OmniOpMode extends LinearOpMode {
             double max;
 
 
-
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-            double lateral =  gamepad1.left_stick_x;
-            double yaw     =  gamepad1.right_stick_x;
+            double axial = 0.0; //-gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral = 0.0; //gamepad1.left_stick_x;
+            double yaw = 0.0; //gamepad1.right_stick_x;
+
+            if (gamepad1.a){
+//                leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+//                leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+//                rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+//                rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+                axial = gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+                lateral = -gamepad1.left_stick_x;
+                yaw = gamepad1.right_stick_x;
+
+            }
+
+            else {
+//                leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+//                leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+//                rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+//                rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+                axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+                lateral = gamepad1.left_stick_x;
+                yaw = gamepad1.right_stick_x;
+
+            }
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
-            double leftFrontPower  = axial + lateral + yaw;
+            double leftFrontPower = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
-            double leftBackPower   = axial - lateral + yaw;
-            double rightBackPower  = axial + lateral - yaw;
+            double leftBackPower = axial - lateral + yaw;
+            double rightBackPower = axial + lateral - yaw;
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
@@ -202,22 +222,20 @@ public class OmniOpMode extends LinearOpMode {
             max = Math.max(max, Math.abs(rightBackPower));
 
             if (max > 1.0) {
-                leftFrontPower  /= max;
+                leftFrontPower /= max;
                 rightFrontPower /= max;
-                leftBackPower   /= max;
-                rightBackPower  /= max;
+                leftBackPower /= max;
+                rightBackPower /= max;
             }
 
             // Arm control
-            if (gamepad1.dpad_up || gamepad2.dpad_up) {
+            if (gamepad2.dpad_up) {
                 leftSlide.setPower(0.5);
                 rightSlide.setPower(0.5);
-            }
-            else if (gamepad1.dpad_down || gamepad2.dpad_down) {
+            } else if (gamepad2.dpad_down) {
                 leftSlide.setPower(-0.5);
                 rightSlide.setPower(-0.5);
-            }
-            else {
+            } else {
                 leftSlide.setPower(0);
                 rightSlide.setPower(0);
             }
@@ -241,43 +259,30 @@ public class OmniOpMode extends LinearOpMode {
                 forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            }
-            else if (gamepad2.dpad_left) {
+            } else if (gamepad2.dpad_left) {
 
                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
                 forebar.setPower(.3);
-//                forebar.setTargetPosition(0);
-//                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                forebar.setPower(0.2);
-//                while (opModeIsActive() && forebar.isBusy()) {
-//                    telemetry.addLine("moving forebar");
-//                    telemetry.update();
-//                }
-//                forebar.setPower(0);
                 if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
                     topClaw.setPosition(.8);
                     botClaw.setPosition(.8);
                 }
                 forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            }
-            else if (gamepad2.left_bumper || gamepad1.dpad_left){
+            } else if (gamepad2.left_bumper) {
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
-                forebar.setPower(.5);
+                forebar.setPower(.3);
                 if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
                     topClaw.setPosition(.8);
                     botClaw.setPosition(.8);
                 }
 
-            }
-            else if (gamepad2.right_bumper || gamepad1.dpad_right){
+            } else if (gamepad2.right_bumper) {
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 forebar.setDirection(DcMotorSimple.Direction.FORWARD);
-                forebar.setPower(.5);
-            }
-            else
-            {
+                forebar.setPower(.3);
+            } else {
                 forebar.setPower(0);
                 forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -286,55 +291,92 @@ public class OmniOpMode extends LinearOpMode {
                 telemetry.update();
             }
 
-            // Claw control
-            if (gamepad2.x || gamepad1.x) {
-                botClaw.setPosition(1);
-                topClaw.setPosition(1);
-            }
-            else if (gamepad2.b || gamepad1.b) {
-                botClaw.setPosition(.8);
-                topClaw.setPosition(.8);
-            }
-            else if (gamepad2.y || gamepad1.y) {
-                botClaw.setPosition(1);
-            }
-            else if (gamepad2.a || gamepad1.a) {
-                topClaw.setPosition(1);
-            }
+            //////Motor Control//////
 
-            // Send calculated power to wheels
-            if (gamepad1.left_bumper) {
-                // Slows robot down
-                leftFrontDrive.setPower(leftFrontPower / 3);
-                rightFrontDrive.setPower(rightFrontPower / 3);
-                leftBackDrive.setPower(leftBackPower / 3);
-                rightBackDrive.setPower(rightBackPower / 3);
-            }
-            else if (gamepad1.right_bumper) {
-                // Speeds up robot
-                leftFrontDrive.setPower(leftFrontPower);
-                rightFrontDrive.setPower(rightFrontPower);
-                leftBackDrive.setPower(leftBackPower);
-                rightBackDrive.setPower(rightBackPower);
-            }
-            else {
-                // Base speed for robot
-                leftFrontDrive.setPower(leftFrontPower / 1.5);
-                rightFrontDrive.setPower(rightFrontPower / 1.5);
-                leftBackDrive.setPower(leftBackPower / 1.5);
-                rightBackDrive.setPower(rightBackPower / 1.5);
-            }
+//            if (gamepad1.a) {
+//                telemetry.addData("LeftFrontDrive", leftFrontDrive.getDirection().toString());
+//                telemetry.update();
+//                if (leftFrontDrive.getDirection() == DcMotorSimple.Direction.REVERSE) {
+//                    leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+//                    leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+//                    rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+//                    rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+//                } else {
+//                    leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+//                    leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+//                    rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+//                    rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+//                }
+//            }
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Forebar Motor:", forebar.getCurrentPosition());
+
+//           if (gamepad1.a){
+////                leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+////                leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+////                rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+////                rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+//               axial = gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+//               lateral = -gamepad1.left_stick_x;
+//               yaw = gamepad1.right_stick_x;
+//
+//            }
+//
+//            else {
+////                leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+////                leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
+////                rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+////                rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+//               axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+//               lateral = gamepad1.left_stick_x;
+//               yaw = gamepad1.right_stick_x;
+//
+//            }
+
+                // Claw control
+                if (gamepad2.x) {
+                    botClaw.setPosition(1);
+                    topClaw.setPosition(1);
+                } else if (gamepad2.b) {
+                    botClaw.setPosition(.8);
+                    topClaw.setPosition(.8);
+                } else if (gamepad2.y) {
+                    botClaw.setPosition(1);
+                } else if (gamepad2.a) {
+                    topClaw.setPosition(1);
+                }
+
+                // Send calculated power to wheels
+                if (gamepad1.left_bumper) {
+                    // Slows robot down
+                    leftFrontDrive.setPower(leftFrontPower / 3);
+                    rightFrontDrive.setPower(rightFrontPower / 3);
+                    leftBackDrive.setPower(leftBackPower / 3);
+                    rightBackDrive.setPower(rightBackPower / 3);
+                } else if (gamepad1.right_bumper) {
+                    // Speeds up robot
+                    leftFrontDrive.setPower(leftFrontPower);
+                    rightFrontDrive.setPower(rightFrontPower);
+                    leftBackDrive.setPower(leftBackPower);
+                    rightBackDrive.setPower(rightBackPower);
+                } else {
+                    // Base speed for robot
+                    leftFrontDrive.setPower(leftFrontPower / 1.5);
+                    rightFrontDrive.setPower(rightFrontPower / 1.5);
+                    leftBackDrive.setPower(leftBackPower / 1.5);
+                    rightBackDrive.setPower(rightBackPower / 1.5);
+                }
+
+                // Show the elapsed game time and wheel power.
+                telemetry.addData("Status", "Run Time: " + runtime.toString());
+                telemetry.addData("Forebar Motor:", forebar.getCurrentPosition());
 //            telemetry.addData("Left Slide Position", leftSlide.getCurrentPosition());
 //            telemetry.addData("Right Slide Position", rightSlide.getCurrentPosition());
-            //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.update();
+                //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+                telemetry.update();
+
         }
+
+
     }
-
-
 
 }
