@@ -104,6 +104,8 @@ public class RedAuton extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
+    private int order = 0;
+
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -197,6 +199,11 @@ public class RedAuton extends LinearOpMode {
                 rightBackDrive.getCurrentPosition());
         telemetry.update();
 
+        topClaw.setDirection(Servo.Direction.REVERSE);
+        botClaw.setDirection(Servo.Direction.FORWARD);
+        topClaw.setPosition(.8);
+        botClaw.setPosition(.8);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -221,10 +228,45 @@ public class RedAuton extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-//        encoderDrive(DRIVE_SPEED,  18,  18, 18, 18, 0, 0, 0, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-//        encoderDrive(TURN_SPEED,   18, -18, 18, -18, 0, 0, 0,  8.0); //        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-//        encoderDrive(DRIVE_SPEED,  22,  22, 22, 22, 0, 0, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 925, 943, -696,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  23,  23, 23, 23,
+                0, 0, 0, 0, 0, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   20, -20, 20, -20,
+                0, 0, 0, 0, 0, 8.0); //        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  34,  34, 34, 34,
+                0, 0, 0, 0, 0,   5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+        order = 1;
+        while (order == 1 && opModeIsActive()) {
+            encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                    925, 943, 696, 0.3, 0.2,5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+            order = 0;
+            break;
+        }
+        botClaw.setPosition(1);
+        sleep(1000);
+        topClaw.setPosition(1);
+        sleep(1000);
+        botClaw.setPosition(.8);
+        topClaw.setPosition(.8);
+
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        order = 2;
+        while (order == 2 && opModeIsActive()) {
+            encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                    -917, -934, - 670, 0.3, 0.2,5.0);
+            order = 0;
+            break;
+        }
+        encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
+                0, 0, 0, 0, 0,5.0);
+
+
+
 //      1822, 1871, 863
 //        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 600, 600, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 
@@ -250,6 +292,8 @@ public class RedAuton extends LinearOpMode {
                              double leftBackInches, double rightBackInches,
                              int leftEncoder, int rightEncoder,
                              int forebarEncoder,
+                             double slideSpeed,
+                             double forebarSpeed,
                              double timeoutS) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
@@ -292,9 +336,9 @@ public class RedAuton extends LinearOpMode {
             rightFrontDrive.setPower(Math.abs(speed));
             leftBackDrive.setPower(Math.abs(speed));
             rightBackDrive.setPower(Math.abs(speed));
-            leftSlide.setPower(Math.abs(speed));
-            rightSlide.setPower(Math.abs(speed));
-            forebar.setPower(Math.abs(speed));
+            leftSlide.setPower(Math.abs(slideSpeed));
+            rightSlide.setPower(Math.abs(slideSpeed));
+            forebar.setPower(Math.abs(forebarSpeed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -315,6 +359,15 @@ public class RedAuton extends LinearOpMode {
                         leftFrontDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(),
                         leftBackDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
                 telemetry.update();
+            }
+
+            while(opModeIsActive() &&
+                    (runtime.seconds()<timeoutS)&&
+                    (leftSlide.isBusy() && rightSlide.isBusy())){
+                telemetry.addData("Running to slide position", "%7d : %7d",
+                        leftEncoder, rightEncoder);
+                telemetry.addData("Currently at", " at %7d :%7d",
+                        leftSlide.getCurrentPosition(), rightSlide.getCurrentPosition());
             }
 
             // Stop all motion;
