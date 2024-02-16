@@ -233,10 +233,10 @@ public class OmniOpMode extends LinearOpMode {
             }
 
             // Arm control
-            if (gamepad2.dpad_up) {
+            if (gamepad2.dpad_down) {
                 leftSlide.setPower(0.5);
                 rightSlide.setPower(0.5);
-            } else if (gamepad2.dpad_down) {
+            } else if (gamepad2.dpad_up) {
                 leftSlide.setPower(-0.5);
                 rightSlide.setPower(-0.5);
             } else {
@@ -245,64 +245,72 @@ public class OmniOpMode extends LinearOpMode {
             }
 
             // Forebar control
-            if (gamepad2.dpad_right && forebar.getCurrentPosition() < 660) {
-//                forebar.setTargetPosition(forebar.getCurrentPosition() - 0.04  );
-//                leftForebar.setPosition(0.0);
-//                rightForebar.setPosition(0.0);
-//                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                forebar.setDirection(DcMotorSimple.Direction.FORWARD);
-                forebar.setPower(.3);
-//                forebar.setTargetPosition(660);
-//                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                forebar.setPower(0.3);
-//                while (opModeIsActive() && forebar.isBusy()) {
-//                    telemetry.addLine("moving forebar");
-//                    telemetry.update();
-//                }
-//                forebar.setPower(0);
-                forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-            }
-
-//            if (gamepad1.dpad_right){
-//                drone.setPosition(0);
+//            if (gamepad2.dpad_right && forebar.getCurrentPosition() < 660) {
+////                forebar.setTargetPosition(forebar.getCurrentPosition() - 0.04  );
+////                leftForebar.setPosition(0.0);
+////                rightForebar.setPosition(0.0);
+////                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+//                forebar.setPower(.3);
+////                forebar.setTargetPosition(660);
+////                forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+////                forebar.setPower(0.3);
+////                while (opModeIsActive() && forebar.isBusy()) {
+////                    telemetry.addLine("moving forebar");
+////                    telemetry.update();
+////                }
+////                forebar.setPower(0);
+//                forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
 //            }
-            else if (gamepad1.dpad_left){
-                    drone.setPosition(0);
-                }
+//
+//            else if (gamepad2.dpad_left) {
+//
+//                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+//                forebar.setPower(.3);
+//                if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+//                    topClaw.setPosition(.8);
+//                    botClaw.setPosition(.8);
+//                }
+//                forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//             }
 
-             if (gamepad2.dpad_left) {
+              if (gamepad2.right_bumper || gamepad2.dpad_right) {
+                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+                 forebar.setPower(.3);
+//                 if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+//                     topClaw.setPosition(.8);
+//                     botClaw.setPosition(.8);
+//                 }
+             }
 
-                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
-                forebar.setPower(.3);
-                if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
-                    topClaw.setPosition(.8);
-                    botClaw.setPosition(.8);
-                }
-                forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            } else if (gamepad2.left_bumper) {
-                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                forebar.setDirection(DcMotorSimple.Direction.REVERSE);
-                forebar.setPower(.3);
-                if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
-                    topClaw.setPosition(.8);
-                    botClaw.setPosition(.8);
-                }
-
-
-            } else if (gamepad2.right_bumper) {
+             else if (gamepad2.left_bumper || gamepad2.dpad_left) {
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 forebar.setDirection(DcMotorSimple.Direction.FORWARD);
                 forebar.setPower(.3);
-            } else {
+                  if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+                      topClaw.setPosition(.8);
+                      botClaw.setPosition(.8);
+                  }
+             }
+             else {
                 forebar.setPower(0);
                 forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 telemetry.addData("Current Position:  ", forebar.getCurrentPosition());
 
                 telemetry.update();
+             }
+
+
+            //            if (gamepad1.dpad_right){
+//                drone.setPosition(0);
+//            }
+            if (gamepad1.dpad_left){
+                drone.setPosition(0);
             }
 
             //////Motor Control//////

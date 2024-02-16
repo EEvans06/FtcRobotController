@@ -170,9 +170,9 @@ public class BlueAuton extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightSlide.setDirection(DcMotor.Direction.FORWARD);
-        leftSlide.setDirection(DcMotor.Direction.REVERSE);
-        forebar.setDirection(DcMotor.Direction.FORWARD);
+        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        leftSlide.setDirection(DcMotor.Direction.FORWARD);
+        forebar.setDirection(DcMotor.Direction.REVERSE);
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -241,9 +241,9 @@ public class BlueAuton extends LinearOpMode {
             order = 0;
             break;
         }
-        botClaw.setPosition(1);
-        sleep(1000);
         topClaw.setPosition(1);
+        sleep(1000);
+        botClaw.setPosition(1);
         sleep(1000);
         botClaw.setPosition(.8);
         topClaw.setPosition(.8);
