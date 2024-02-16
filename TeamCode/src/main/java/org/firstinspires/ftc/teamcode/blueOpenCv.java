@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -160,9 +161,9 @@ public class blueOpenCv extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightSlide.setDirection(DcMotor.Direction.FORWARD);
-        leftSlide.setDirection(DcMotor.Direction.REVERSE);
-        forebar.setDirection(DcMotor.Direction.FORWARD);
+        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        leftSlide.setDirection(DcMotor.Direction.FORWARD);
+        forebar.setDirection(DcMotor.Direction.REVERSE);
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -224,24 +225,34 @@ public class blueOpenCv extends LinearOpMode {
         controlHubCam.stopStreaming();
 
         if (spikeTarget == 1){
-//            encoderDrive(DRIVE_SPEED,  -23,  23, 23, -23,
-//                    0, 0, 0, 0, 0, 5.0);//strafe left
-//            encoderDrive(DRIVE_SPEED,  23,  23, 23, 23,
-//                    0, 0, 0, 0, 0, 5.0);//forward
-//            encoderDrive(TURN_SPEED,  -18,  18, -18, 18,
-//                    0, 0, 0, 0, 0, 5.0);//turn right
-//            encoderDrive(DRIVE_SPEED,  2,  2, 2, 2,
-//                    0, 0, 0, 0, 0, 5.0);//forward
-//            topClaw.setPosition(1);
+            encoderDrive(DRIVE_SPEED,  -23,  23, 23, -23,
+                    0, 0, 0, 0, 0, 5.0);//strafe left
+            encoderDrive(DRIVE_SPEED,  23,  23, 23, 23,
+                    0, 0, 0, 0, 0, 5.0);//forward
+            encoderDrive(TURN_SPEED,  -18,  18, -18, 18,
+                    0, 0, 0, 0, 0, 5.0);//turn right
+            encoderDrive(DRIVE_SPEED,  2,  2, 2, 2,
+                    0, 0, 0, 0, 0, 5.0);//forward
+            topClaw.setPosition(1);
             order = 1;
             while (order == 1 && opModeIsActive()){
-                encoderDrive(DRIVE_SPEED,  -0,  -0, -0, -0,
+                encoderDrive(DRIVE_SPEED,  -13,  -13, -13, -13,
                         0, 0, 143, 0, 0.3, 5.0);
                 order = 0;
+                sleep(1000);
                 topClaw.setPosition(.8);
                 break;
             }
+            rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            encoderDrive(DRIVE_SPEED,  14,  -14, -14, 14,
+                    0, 0, 0, 0, 0, 5.0);//strafe left
             order = 2;
             while (order == 2 && opModeIsActive()) {
                 encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
@@ -249,8 +260,8 @@ public class blueOpenCv extends LinearOpMode {
                 order = 0;
                 break;
             }
-//            topClaw.setPosition(1);
-//            botClaw.setPosition(1);
+            topClaw.setPosition(1);
+            botClaw.setPosition(1);
 
             rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -260,8 +271,8 @@ public class blueOpenCv extends LinearOpMode {
             leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//            topClaw.setPosition(0.8);
-//            botClaw.setPosition(0.8);
+            topClaw.setPosition(0.8);
+            botClaw.setPosition(0.8);
 
             order = 3;
             while (order == 3 && opModeIsActive()) {
@@ -273,7 +284,16 @@ public class blueOpenCv extends LinearOpMode {
 
         }
         else if (spikeTarget == 2){
-
+            encoderDrive(DRIVE_SPEED,  -23,  23, 23, -23,
+                    0, 0, 0, 0, 0, 5.0);//Forward
+            topClaw.setPosition(1);
+            order = 1;
+            while (order == 1 && opModeIsActive()){
+                encoderDrive(DRIVE_SPEED,  0,  0, 0, 0,
+                        0, 0, 140, 0, .2, 5.0);//raise forebar
+                encoderDrive(DRIVE_SPEED,  15,  15, 15, 0,
+                        0, 0, 140, 0, .2, 5.0);//drive backwards
+            }
         }
     }
 
@@ -375,6 +395,14 @@ public class blueOpenCv extends LinearOpMode {
                         leftFrontDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(),
                         leftBackDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
                 telemetry.update();
+            }
+            while(opModeIsActive() &&
+                    (runtime.seconds()<timeoutS)&&
+                    (leftSlide.isBusy() && rightSlide.isBusy())){
+                telemetry.addData("Running to slide position", "%7d : %7d",
+                        leftEncoder, rightEncoder);
+                telemetry.addData("Currently at", " at %7d :%7d",
+                        leftSlide.getCurrentPosition(), rightSlide.getCurrentPosition());
             }
 
             // Stop all motion;
