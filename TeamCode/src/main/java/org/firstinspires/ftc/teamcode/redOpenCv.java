@@ -410,8 +410,10 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
         Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
 
 //            Imgproc.cvtColor(frame, YCrCb, Imgproc.COLOR_BGR);
-        Scalar lowerYellow = new Scalar(100, 100, 100);
-        Scalar upperYellow = new Scalar(180, 255, 255);
+//        Scalar lowerYellow = new Scalar(100, 100, 100);
+//        Scalar upperYellow = new Scalar(180, 255, 255);
+        Scalar lowerYellow = new Scalar(0, 100, 100);
+        Scalar upperYellow = new Scalar(120, 255, 255);
 
 //            Scalar lowerRed = new Scalar(0, 0, 0);
 //            Scalar upperRed = new Scalar(255, 255, 255);
