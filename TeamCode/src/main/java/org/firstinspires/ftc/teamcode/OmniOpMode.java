@@ -87,6 +87,7 @@ public class OmniOpMode extends LinearOpMode {
 
     private Servo topClaw = null;
     private Servo botClaw = null;
+    private Servo drone = null;
 
     double motorMode = 0;
 
@@ -115,6 +116,7 @@ public class OmniOpMode extends LinearOpMode {
 
         topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
         botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
+        drone = hardwareMap.get(Servo.class, "drone"); //EH Port 4
 
         forebar.setDirection(DcMotor.Direction.FORWARD);
 
@@ -165,6 +167,8 @@ public class OmniOpMode extends LinearOpMode {
 
         topClaw.setDirection(Servo.Direction.REVERSE);
         botClaw.setDirection(Servo.Direction.FORWARD);
+        drone.setDirection(Servo.Direction.FORWARD);
+        drone.setPosition(.5);
         topClaw.setPosition(.8);
         botClaw.setPosition(.8);
 
@@ -259,7 +263,16 @@ public class OmniOpMode extends LinearOpMode {
                 forebar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            } else if (gamepad2.dpad_left) {
+            }
+
+//            if (gamepad1.dpad_right){
+//                drone.setPosition(0);
+//            }
+            else if (gamepad1.dpad_left){
+                    drone.setPosition(0);
+                }
+
+             if (gamepad2.dpad_left) {
 
                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
                 forebar.setPower(.3);
@@ -277,6 +290,7 @@ public class OmniOpMode extends LinearOpMode {
                     topClaw.setPosition(.8);
                     botClaw.setPosition(.8);
                 }
+
 
             } else if (gamepad2.right_bumper) {
                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
