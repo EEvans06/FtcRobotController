@@ -276,6 +276,8 @@ public class blueOpenCv extends LinearOpMode {
 
             order = 3;
             while (order == 3 && opModeIsActive()) {
+                topClaw.setPosition(0.8);
+                botClaw.setPosition(0.8);
                 encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                         -917, -934, -670, 0.3, .2, 5.0);
                 order = 0;
@@ -291,9 +293,12 @@ public class blueOpenCv extends LinearOpMode {
             while (order == 1 && opModeIsActive()){
                 encoderDrive(DRIVE_SPEED,  0,  0, 0, 0,
                         0, 0, 140, 0, .2, 5.0);//raise forebar
-                encoderDrive(DRIVE_SPEED,  15,  15, 15, 0,
+                encoderDrive(DRIVE_SPEED,  -15,  -15, -15, -15,
                         0, 0, 140, 0, .2, 5.0);//drive backwards
+                order = 0;
+                break;
             }
+
         }
     }
 
