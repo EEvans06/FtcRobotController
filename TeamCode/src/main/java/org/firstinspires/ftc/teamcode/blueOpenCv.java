@@ -34,13 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 // New imports for openCV
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -52,7 +46,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -81,9 +75,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="redOpenCv", group="Robot")
+@Autonomous(name="blueOpenCv", group="Robot")
 //@Disabled
-public class redOpenCv extends LinearOpMode {
+public class blueOpenCv extends LinearOpMode {
 
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
     /* Declare OpMode members. */
@@ -162,10 +156,10 @@ public class redOpenCv extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightSlide.setDirection(DcMotor.Direction.FORWARD);
         leftSlide.setDirection(DcMotor.Direction.REVERSE);
         forebar.setDirection(DcMotor.Direction.FORWARD);
@@ -229,7 +223,58 @@ public class redOpenCv extends LinearOpMode {
 
         controlHubCam.stopStreaming();
 
+        if (spikeTarget == 1){
+//            encoderDrive(DRIVE_SPEED,  -23,  23, 23, -23,
+//                    0, 0, 0, 0, 0, 5.0);//strafe left
+//            encoderDrive(DRIVE_SPEED,  23,  23, 23, 23,
+//                    0, 0, 0, 0, 0, 5.0);//forward
+//            encoderDrive(TURN_SPEED,  -18,  18, -18, 18,
+//                    0, 0, 0, 0, 0, 5.0);//turn right
+//            encoderDrive(DRIVE_SPEED,  2,  2, 2, 2,
+//                    0, 0, 0, 0, 0, 5.0);//forward
+//            topClaw.setPosition(1);
+            order = 1;
+            while (order == 1 && opModeIsActive()){
+                encoderDrive(DRIVE_SPEED,  -0,  -0, -0, -0,
+                        0, 0, 143, 0, 0.3, 5.0);
+                order = 0;
+                topClaw.setPosition(.8);
+                break;
+            }
 
+            order = 2;
+            while (order == 2 && opModeIsActive()) {
+                encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                        925, 943, 696, 0.3, 0.2, 5.0);
+                order = 0;
+                break;
+            }
+//            topClaw.setPosition(1);
+//            botClaw.setPosition(1);
+
+            rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+//            topClaw.setPosition(0.8);
+//            botClaw.setPosition(0.8);
+
+            order = 3;
+            while (order == 3 && opModeIsActive()) {
+                encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                        -917, -934, -670, 0.3, .2, 5.0);
+                order = 0;
+                break;
+            }
+
+        }
+        else if (spikeTarget == 2){
+
+        }
     }
 
 
@@ -264,6 +309,10 @@ public class redOpenCv extends LinearOpMode {
     public void encoderDrive(double speed,
                              double leftFrontInches, double rightFrontInches,
                              double leftBackInches, double rightBackInches,
+                             int leftEncoder, int rightEncoder,
+                             int forebarEncoder,
+                             double slideSpeed,
+                             double forebarSpeed,
                              double timeoutS) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
@@ -278,16 +327,24 @@ public class redOpenCv extends LinearOpMode {
             newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
             newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
             newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
+
             leftFrontDrive.setTargetPosition(newLeftFrontTarget);
             rightFrontDrive.setTargetPosition(newRightFrontTarget);
             leftBackDrive.setTargetPosition(newLeftBackTarget);
             rightBackDrive.setTargetPosition(newRightBackTarget);
+            leftSlide.setTargetPosition(leftEncoder);
+            rightSlide.setTargetPosition(rightEncoder);
+            forebar.setTargetPosition(forebarEncoder);
 
             // Turn On RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -295,6 +352,9 @@ public class redOpenCv extends LinearOpMode {
             rightFrontDrive.setPower(Math.abs(speed));
             leftBackDrive.setPower(Math.abs(speed));
             rightBackDrive.setPower(Math.abs(speed));
+            leftSlide.setPower(Math.abs(slideSpeed));
+            rightSlide.setPower(Math.abs(slideSpeed));
+            forebar.setPower(Math.abs(forebarSpeed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -322,12 +382,18 @@ public class redOpenCv extends LinearOpMode {
             rightFrontDrive.setPower(0);
             leftBackDrive.setPower(0);
             rightBackDrive.setPower(0);
+            leftSlide.setPower(0);
+            rightSlide.setPower(0);
+            forebar.setPower(0);
 
             // Turn off RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
         }
@@ -341,7 +407,7 @@ public class redOpenCv extends LinearOpMode {
         // Use OpenCvCameraFactory class from FTC SDK to create camera instance
         controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(webcam1);
 
-        controlHubCam.setPipeline(new redOpenCv.YellowBlobDetectionPipeline());
+        controlHubCam.setPipeline(new blueOpenCv.YellowBlobDetectionPipeline());
 
         controlHubCam.openCameraDevice();
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
@@ -394,12 +460,12 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
             Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
         }
-        if ((int) cX < 600) {
+        if ((int) cX > 180 && (int) cX < 750) {
             spikeTarget = 2;
-        } else if ((int) maxArea > 5000) {
-            spikeTarget = 3;
-        } else {
+        } else if ((int) cX < 180) {
             spikeTarget = 1;
+        } else {
+            spikeTarget = 3;
         }
 
         return input;

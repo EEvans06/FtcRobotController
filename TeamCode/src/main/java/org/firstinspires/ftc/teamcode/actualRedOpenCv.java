@@ -79,9 +79,9 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blueOpenCv", group="Robot")
+@Autonomous(name="actualRedOpenCv", group="Robot")
 //@Disabled
-public class blueOpencv extends LinearOpMode {
+public class actualRedOpenCv extends LinearOpMode {
 
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
     /* Declare OpMode members. */
@@ -160,10 +160,10 @@ public class blueOpencv extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightSlide.setDirection(DcMotor.Direction.FORWARD);
         leftSlide.setDirection(DcMotor.Direction.REVERSE);
         forebar.setDirection(DcMotor.Direction.FORWARD);
@@ -205,36 +205,32 @@ public class blueOpencv extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        while (opModeIsActive()) {
 
-            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
-            telemetry.addData("Distance in Inch", (getDistance(width)));
-            telemetry.addData("cX is equal to", cX);
-            telemetry.addData("maxArea is equal to", maxArea);
+        telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+        telemetry.addData("Distance in Inch", (getDistance(width)));
+        telemetry.addData("cX is equal to", cX);
+        telemetry.addData("maxArea is equal to", maxArea);
 //            telemetry.update();
-            double distance = getDistance(width);
+        double distance = getDistance(width);
 
-            telemetry.addData("Spike Target", spikeTarget);
+        telemetry.addData("Spike Target", spikeTarget);
 
-            telemetry.update();
-
-
-            controlHubCam.stopStreaming();
-
-            telemetry.addData("Spike Target", spikeTarget);
-
-            telemetry.update();
+        telemetry.update();
 
 
-            controlHubCam.stopStreaming();
+        controlHubCam.stopStreaming();
 
-//            if (spikeTarget == 1){
-//                encoderDrive();
-//            }
+        telemetry.addData("Spike Target", spikeTarget);
+
+        telemetry.update();
+
+
+        controlHubCam.stopStreaming();
+
+        if (spikeTarget == 1){
 
         }
     }
-
 
 
 
@@ -345,7 +341,7 @@ public class blueOpencv extends LinearOpMode {
         // Use OpenCvCameraFactory class from FTC SDK to create camera instance
         controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(webcam1);
 
-        controlHubCam.setPipeline(new blueOpencv.YellowBlobDetectionPipeline());
+        controlHubCam.setPipeline(new actualRedOpenCv.YellowBlobDetectionPipeline());
 
         controlHubCam.openCameraDevice();
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
@@ -398,12 +394,12 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
             Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
         }
-        if ((int) cX < 250) {
-            spikeTarget = 1;
-        } else if ((int) cX > 250) {
+        if ((int) cX < 600) {
             spikeTarget = 2;
-        } else {
+        } else if ((int) maxArea > 5000) {
             spikeTarget = 3;
+        } else {
+            spikeTarget = 1;
         }
 
         return input;
