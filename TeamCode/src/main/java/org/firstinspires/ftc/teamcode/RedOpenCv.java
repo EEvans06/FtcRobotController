@@ -145,14 +145,14 @@ public class RedOpenCv extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");
 
-        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
-        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
+        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
 
         forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
 //        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
+        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -226,7 +226,7 @@ public class RedOpenCv extends LinearOpMode {
             if (spikeTarget == 1&&order==0) {
                 encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
                         0, 0, 0, 0, 0, 5.0);//Drive forward
-                encoderDrive(TURN_SPEED, -16, 16, -16, 16,
+                encoderDrive(TURN_SPEED, 16, -16, 16, -16,
                         0, 0, 0, 0, 0, 5.0);//Turn 90 degrees to the left
                 encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
                         0, 0, 0, 0, 0, 5.0);//Drive forward
@@ -234,7 +234,7 @@ public class RedOpenCv extends LinearOpMode {
                 order = 1;
 
                 while (order == 1 && opModeIsActive()){
-                    encoderDrive(DRIVE_SPEED, -23, -23, -23, -23,
+                    encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
                             0, 0, 210, 0, .3, 5.0);//Raise the forebar to release the PP
                     topClaw.setPosition(.8);
                     //as well as move backwards to board
@@ -257,9 +257,14 @@ public class RedOpenCv extends LinearOpMode {
                 while (order == 2 && opModeIsActive()){
                     topClaw.setPosition(.8);
                     botClaw.setPosition(.8);
+                    sleep(1000);
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                             -917, -934, -670, 0.3, .2, 5.0);//lower slides and forbar
                 }
+                encoderDrive(DRIVE_SPEED, -20, 20, -20, 20,
+                        0, 0, 0, 0, 0, 5.0);
+                encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
+                        0, 0, 0, 0, 0, 5.0);
 
             } else if (spikeTarget == 2 && order==0) {
                 encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
@@ -271,18 +276,19 @@ public class RedOpenCv extends LinearOpMode {
                             0, 0, 140, 0, .2, 5.0);//raise forebar
                     encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
                             0, 0, 140, 0, .2, 5.0);//drive backwards
-                    encoderDrive(TURN_SPEED, -17, 17, -17, 17,
+                    encoderDrive(TURN_SPEED, 18, -18, 18, -18,
                             0, 0, 0, 0, 0, 5.0);//turn left
                     order = 4;
                 }
                 topClaw.setPosition(.8);
-                encoderDrive(DRIVE_SPEED, -18, -18, -18, -18,
+                encoderDrive(DRIVE_SPEED, -24, -24, -24, -24,
                         0, 0, 0, 0, 0, 5.0);//Forward
                 while (order == 4 && opModeIsActive()){
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                             830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
                     order = 5;
                 }
+                sleep(1000);
                 topClaw.setPosition(1);
                 botClaw.setPosition(1);
                 sleep(1000);
@@ -297,10 +303,14 @@ public class RedOpenCv extends LinearOpMode {
                 leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                while(order == 5){
+                while(order == 5 && opModeIsActive()){
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                             -917, -934, -670, 0.3, .2, 5.0);//lower slides and forbar
                 }
+                encoderDrive(DRIVE_SPEED, -20, 20, -20, 20,
+                        0, 0, 0, 0, 0, 5.0);
+                encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
+                        0, 0, 0, 0, 0, 5.0);
 
             }
             else if (spikeTarget == 3 && order==0) {
@@ -308,16 +318,16 @@ public class RedOpenCv extends LinearOpMode {
                         0, 0, 0, 0, 0, 5.0);//strafe right
                 encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
                         0, 0, 0, 0, 0, 5.0);//forward
-                encoderDrive(TURN_SPEED, 16, -16, 16, -16,
+                encoderDrive(TURN_SPEED, -16, 16, -16, 16,
                         0, 0, 0, 0, 0, 5.0);//turn left
-                encoderDrive(DRIVE_SPEED, 3, 3, 3, 3,
+                encoderDrive(DRIVE_SPEED, -3, -3, -3, -3,
                         0, 0, 0, 0, 0, 5.0);//forward
                 topClaw.setPosition(1);
                 order = 1;
                 while (order == 1 && opModeIsActive()) {
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                             0, 0, 210, 0, 0.3, 5.0);
-                    encoderDrive(DRIVE_SPEED, -10, -10, -10, -10,
+                    encoderDrive(DRIVE_SPEED, 10, 10, 10, 10,
                             0, 0, 0, 0, 0, 5.0);
 
                     sleep(1000);
@@ -364,6 +374,10 @@ public class RedOpenCv extends LinearOpMode {
                             -917, -934, -670, 0.3, .2, 5.0);
                     order = 4;
                 }
+                encoderDrive(DRIVE_SPEED, -20, 20, -20, 20,
+                        0, 0, 0, 0, 0, 5.0);
+                encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
+                        0, 0, 0, 0, 0, 5.0);
             }
         }
         controlHubCam.stopStreaming();
@@ -562,10 +576,10 @@ public class RedOpenCv extends LinearOpMode {
             }
             if ((int) cX > 180 && (int) cX < 800 && (int)maxArea>12000) {
                 spikeTarget = 2;
-            } else if ((int) cX < 179 && (int)maxArea>12000) {
-                spikeTarget = 1;
-            } else {
+            } else if ((int) cX > 500  && (int)maxArea>12000) {
                 spikeTarget = 3;
+            } else {
+                spikeTarget = 1;
                 telemetry.addData("Else Spike target = 3","Hello world");
                 telemetry.update();
             }

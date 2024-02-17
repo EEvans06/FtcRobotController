@@ -108,14 +108,14 @@ public class OmniOpMode extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");// CH Port: 1
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");  // CH Port: 3
 
-        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
-        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
+        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
 
         forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
 //        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
+        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
         drone = hardwareMap.get(Servo.class, "drone"); //EH Port 4
 
         forebar.setDirection(DcMotor.Direction.FORWARD);
@@ -296,6 +296,11 @@ public class OmniOpMode extends LinearOpMode {
                       botClaw.setPosition(.8);
                   }
              }
+              else if (gamepad2.left_trigger != 0) {
+                  forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                  forebar.setDirection(DcMotorSimple.Direction.FORWARD);
+                  forebar.setPower(.3);
+              }
              else {
                 forebar.setPower(0);
                 forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

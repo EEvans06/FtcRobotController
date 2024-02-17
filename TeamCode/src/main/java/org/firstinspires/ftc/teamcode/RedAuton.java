@@ -155,14 +155,14 @@ public class RedAuton extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");
 
-        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
-        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
+        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
 
         forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
 //        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
+        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -232,7 +232,7 @@ public class RedAuton extends LinearOpMode {
                 0, 0, 0, 0, 0, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
         encoderDrive(TURN_SPEED,   20, -20, 20, -20,
                 0, 0, 0, 0, 0, 8.0); //        encoderDrive(DRIVE_SPEED,  -20,  -20, -20, -20, 10.0);  // S1: Reverse 30 Inches with 5 Sec timeout
-        encoderDrive(DRIVE_SPEED,  34,  34, 34, 34,
+        encoderDrive(DRIVE_SPEED,  30,  30, 30, 30,
                 0, 0, 0, 0, 0,   5.0);  // S1: Forward 30 Inches with 5 Sec timeout
         order = 1;
         while (order == 1 && opModeIsActive()) {
@@ -263,6 +263,9 @@ public class RedAuton extends LinearOpMode {
             break;
         }
         encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
+                0, 0, 0, 0, 0,5.0);
+        sleep(500);
+        encoderDrive(DRIVE_SPEED, -25, 25, 25, -25,
                 0, 0, 0, 0, 0,5.0);
 
 

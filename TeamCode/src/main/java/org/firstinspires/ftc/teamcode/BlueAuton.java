@@ -155,14 +155,14 @@ public class BlueAuton extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");
 
-        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
-        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
+        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
 
         forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
 //        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
+        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -243,6 +243,8 @@ public class BlueAuton extends LinearOpMode {
         }
         topClaw.setPosition(1);
         sleep(1000);
+        encoderDrive(DRIVE_SPEED,  0, 0, 0, 0,
+                0, 0, 650, 0, 0.2,   5.0);
         botClaw.setPosition(1);
         sleep(1000);
         botClaw.setPosition(.8);
@@ -263,6 +265,8 @@ public class BlueAuton extends LinearOpMode {
             break;
         }
         encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
+                0, 0, 0, 0, 0,5.0);
+        encoderDrive(DRIVE_SPEED, 15, -15, -15, 15,
                 0, 0, 0, 0, 0,5.0);
 
 

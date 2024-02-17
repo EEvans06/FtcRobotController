@@ -146,14 +146,14 @@ public class blueOpenCv extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "motorBackLeft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");
 
-        rightSlide = hardwareMap.get(DcMotor.class, "right_slide");  // EH Port: 1
-        leftSlide = hardwareMap.get(DcMotor.class, "left_slide");  // EH Port: 0
+        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
+        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
 
         forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
 //        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
 
-        topClaw = hardwareMap.get(Servo.class, "top_claw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class, "bottom_claw");   // EH Port: 3
+        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
+        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -286,7 +286,7 @@ public class blueOpenCv extends LinearOpMode {
                     order = 4;
                 }
             } else if (spikeTarget == 2 && order==0) {
-                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                encoderDrive(DRIVE_SPEED, 22, 22, 22, 22,
                         0, 0, 0, 0, 0, 5.0);//Forward
                 topClaw.setPosition(1);
                 order = 1;
@@ -295,7 +295,7 @@ public class blueOpenCv extends LinearOpMode {
                             0, 0, 140, 0, .2, 5.0);//raise forebar
                     encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
                             0, 0, 140, 0, .2, 5.0);//drive backwards
-                    encoderDrive(TURN_SPEED, 17, -17, 17, -17,
+                    encoderDrive(TURN_SPEED, -17, 17, -17, 17,
                             0, 0, 0, 0, 0, 5.0);//turn right
                     order = 4;
                 }
@@ -562,7 +562,7 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
         }
         if ((int) cX > 180 && (int) cX < 800 && (int)maxArea>12000) {
             spikeTarget = 2;
-        } else if ((int) cX < 179 && (int)maxArea>12000) {
+        } else if ((int) cX < 300 && (int)maxArea>12000) {
             spikeTarget = 1;
         } else {
             spikeTarget = 3;
