@@ -208,7 +208,7 @@ public class RedAuton extends LinearOpMode {
         waitForStart();
 
 //        while (opModeIsActive()) {
-//            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+//            ftelemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
 //            telemetry.addData("Distance in Inch", (distance));
 //            telemetry.update();
 //        }

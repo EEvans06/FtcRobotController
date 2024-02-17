@@ -338,7 +338,7 @@ public class OmniOpMode extends LinearOpMode {
 
 
 //           if (gamepad1.a){
-////                leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+////                leftFrontDrive.rsetDirection(DcMotor.Direction.REVERSE);
 ////                leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
 ////                rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
 ////                rightBackDrive.setDirection(DcMotor.Direction.REVERSE);

@@ -272,7 +272,7 @@ public class BlueAuton extends LinearOpMode {
 
 
 //      1822, 1871, 863
-//        encoderDrive(DRIVE_SPEED,  0,  0, 0, 0, 600, 600, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
+//        encoderDrifve(DRIVE_SPEED,  0,  0, 0, 0, 600, 600, 0,  5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 
 
 // encoderDrive(TURN_SPEED,   23, -23, 23, -23, 8.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
