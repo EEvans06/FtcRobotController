@@ -29,29 +29,25 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
+// New imports for openCV
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
-
 import java.util.ArrayList;
+
 import java.util.List;
+
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
  * This OpMode illustrates the concept of driving a path based on encoder counts.
@@ -79,9 +75,9 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="actualRedOpenCv", group="Robot")
+@Autonomous(name="RedOpenCv", group="Robot")
 //@Disabled
-public class actualRedOpenCv extends LinearOpMode {
+public class RedOpenCv extends LinearOpMode {
 
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
     /* Declare OpMode members. */
@@ -118,7 +114,7 @@ public class actualRedOpenCv extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
-    private double order = 0;
+    private double  order = 0;
 
 
     // New variables for OpenCV
@@ -134,7 +130,7 @@ public class actualRedOpenCv extends LinearOpMode {
     public static final double objectWidthInRealWorldUnits = 3.375;  // Replace with the actual width of the object in real-world units
     public static final double focalLength = 1431.11;  // Replace with the focal length of the camera in pixels
 
-    double spikeTarget = 0;
+    double spikeTarget = 3;
     public double maxArea = 0;
 
     @Override
@@ -164,9 +160,9 @@ public class actualRedOpenCv extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightSlide.setDirection(DcMotor.Direction.FORWARD);
-        leftSlide.setDirection(DcMotor.Direction.REVERSE);
-        forebar.setDirection(DcMotor.Direction.FORWARD);
+        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        leftSlide.setDirection(DcMotor.Direction.FORWARD);
+        forebar.setDirection(DcMotor.Direction.REVERSE);
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -205,39 +201,180 @@ public class actualRedOpenCv extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        while(opModeIsActive()) {
+            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+            telemetry.addData("Distance in Inch", (getDistance(width)));
+            telemetry.addData("cX is equal to", cX);
+            telemetry.addData("maxArea is equal to", maxArea);
+            //            telemetry.update();
+            double distance = getDistance(width);
 
-        telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
-        telemetry.addData("Distance in Inch", (getDistance(width)));
-        telemetry.addData("cX is equal to", cX);
-        telemetry.addData("maxArea is equal to", maxArea);
-//            telemetry.update();
-        double distance = getDistance(width);
+            telemetry.addData("Spike Target", spikeTarget);
 
-        telemetry.addData("Spike Target", spikeTarget);
-
-        telemetry.update();
-
-
-        controlHubCam.stopStreaming();
-
-        telemetry.addData("Spike Target", spikeTarget);
-
-        telemetry.update();
+            telemetry.update();
 
 
-        controlHubCam.stopStreaming();
+            controlHubCam.stopStreaming();
 
-        if (spikeTarget == 1){
+            telemetry.addData("Spike Target", spikeTarget);
 
+            telemetry.update();
+
+
+
+
+            if (spikeTarget == 1&&order==0) {
+                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                        0, 0, 0, 0, 0, 5.0);//Drive forward
+                encoderDrive(TURN_SPEED, -16, 16, -16, 16,
+                        0, 0, 0, 0, 0, 5.0);//Turn 90 degrees to the left
+                encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
+                        0, 0, 0, 0, 0, 5.0);//Drive forward
+                topClaw.setPosition(1);//Opening bottom claw to release PP
+                order = 1;
+
+                while (order == 1 && opModeIsActive()){
+                    encoderDrive(DRIVE_SPEED, -23, -23, -23, -23,
+                            0, 0, 210, 0, .3, 5.0);//Raise the forebar to release the PP
+                    topClaw.setPosition(.8);
+                    //as well as move backwards to board
+                    sleep(500);
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
+                    order = 2;
+                }
+                topClaw.setPosition(1);
+                botClaw.setPosition(1);
+
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                while (order == 2 && opModeIsActive()){
+                    topClaw.setPosition(.8);
+                    botClaw.setPosition(.8);
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            -917, -934, -670, 0.3, .2, 5.0);//lower slides and forbar
+                }
+
+            } else if (spikeTarget == 2 && order==0) {
+                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                        0, 0, 0, 0, 0, 5.0);//Forward
+                topClaw.setPosition(1);
+                order = 1;
+                while (order == 1 && opModeIsActive()) {
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            0, 0, 140, 0, .2, 5.0);//raise forebar
+                    encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
+                            0, 0, 140, 0, .2, 5.0);//drive backwards
+                    encoderDrive(TURN_SPEED, -17, 17, -17, 17,
+                            0, 0, 0, 0, 0, 5.0);//turn left
+                    order = 4;
+                }
+                topClaw.setPosition(.8);
+                encoderDrive(DRIVE_SPEED, -18, -18, -18, -18,
+                        0, 0, 0, 0, 0, 5.0);//Forward
+                while (order == 4 && opModeIsActive()){
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
+                    order = 5;
+                }
+                topClaw.setPosition(1);
+                botClaw.setPosition(1);
+                sleep(1000);
+                topClaw.setPosition(.8);
+                botClaw.setPosition(.8);
+
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                while(order == 5){
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            -917, -934, -670, 0.3, .2, 5.0);//lower slides and forbar
+                }
+
+            }
+            else if (spikeTarget == 3 && order==0) {
+                encoderDrive(DRIVE_SPEED, 20, -20, -20, 20,
+                        0, 0, 0, 0, 0, 5.0);//strafe right
+                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                        0, 0, 0, 0, 0, 5.0);//forward
+                encoderDrive(TURN_SPEED, 16, -16, 16, -16,
+                        0, 0, 0, 0, 0, 5.0);//turn left
+                encoderDrive(DRIVE_SPEED, 3, 3, 3, 3,
+                        0, 0, 0, 0, 0, 5.0);//forward
+                topClaw.setPosition(1);
+                order = 1;
+                while (order == 1 && opModeIsActive()) {
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            0, 0, 210, 0, 0.3, 5.0);
+                    encoderDrive(DRIVE_SPEED, -10, -10, -10, -10,
+                            0, 0, 0, 0, 0, 5.0);
+
+                    sleep(1000);
+                    topClaw.setPosition(.8);
+                    order = 2;
+                }
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                encoderDrive(DRIVE_SPEED, 13, -13, -13, 13,
+                        0, 0, 0, 0, 0, 5.0); //strafe left
+
+                while (order == 2 && opModeIsActive()) {
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            830, 910, 850, 0.3, 0.2, 5.0);
+                    order = 3;
+                }
+                topClaw.setPosition(1);
+                botClaw.setPosition(1);
+
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                topClaw.setPosition(0.8);
+                botClaw.setPosition(0.8);
+
+                while (order == 3 && opModeIsActive()) {
+                    topClaw.setPosition(1);
+                    botClaw.setPosition(1);
+                    sleep(1000);
+                    topClaw.setPosition(.8);
+                    botClaw.setPosition(.8);
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            -917, -934, -670, 0.3, .2, 5.0);
+                    order = 4;
+                }
+            }
         }
+        controlHubCam.stopStreaming();
     }
 
 
 
 
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+    // Step through each leg of the path,
+    // Note: Reverse movement is obtained by setting a negative distance (not speed)
 //        encoderDrive(DRIVE_SPEED,  18,  18, 18, 18, 5.0);  // S1: Forward 30 Inches with 5 Sec timeout
 //        encoderDrive(DRIVE_SPEED,  -21,  -21, -21, -21, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
 //        encoderDrive(DRIVE_SPEED,  2,  2, 2, 2, 5.0);  // S1: Reverse 30 Inches with 5 Sec timeout
@@ -264,6 +401,10 @@ public class actualRedOpenCv extends LinearOpMode {
     public void encoderDrive(double speed,
                              double leftFrontInches, double rightFrontInches,
                              double leftBackInches, double rightBackInches,
+                             int leftEncoder, int rightEncoder,
+                             int forebarEncoder,
+                             double slideSpeed,
+                             double forebarSpeed,
                              double timeoutS) {
         int newLeftFrontTarget;
         int newRightFrontTarget;
@@ -278,16 +419,24 @@ public class actualRedOpenCv extends LinearOpMode {
             newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
             newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
             newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
+
             leftFrontDrive.setTargetPosition(newLeftFrontTarget);
             rightFrontDrive.setTargetPosition(newRightFrontTarget);
             leftBackDrive.setTargetPosition(newLeftBackTarget);
             rightBackDrive.setTargetPosition(newRightBackTarget);
+            leftSlide.setTargetPosition(leftEncoder);
+            rightSlide.setTargetPosition(rightEncoder);
+            forebar.setTargetPosition(forebarEncoder);
 
             // Turn On RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -295,6 +444,9 @@ public class actualRedOpenCv extends LinearOpMode {
             rightFrontDrive.setPower(Math.abs(speed));
             leftBackDrive.setPower(Math.abs(speed));
             rightBackDrive.setPower(Math.abs(speed));
+            leftSlide.setPower(Math.abs(slideSpeed));
+            rightSlide.setPower(Math.abs(slideSpeed));
+            forebar.setPower(Math.abs(forebarSpeed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -316,18 +468,32 @@ public class actualRedOpenCv extends LinearOpMode {
                         leftBackDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
                 telemetry.update();
             }
+            while(opModeIsActive() &&
+                    (runtime.seconds()<timeoutS)&&
+                    (leftSlide.isBusy() && rightSlide.isBusy())){
+                telemetry.addData("Running to slide position", "%7d : %7d",
+                        leftEncoder, rightEncoder);
+                telemetry.addData("Currently at", " at %7d :%7d",
+                        leftSlide.getCurrentPosition(), rightSlide.getCurrentPosition());
+            }
 
             // Stop all motion;
             leftFrontDrive.setPower(0);
             rightFrontDrive.setPower(0);
             leftBackDrive.setPower(0);
             rightBackDrive.setPower(0);
+            leftSlide.setPower(0);
+            rightSlide.setPower(0);
+            forebar.setPower(0);
 
             // Turn off RUN_TO_POSITION
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
         }
@@ -341,7 +507,7 @@ public class actualRedOpenCv extends LinearOpMode {
         // Use OpenCvCameraFactory class from FTC SDK to create camera instance
         controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(webcam1);
 
-        controlHubCam.setPipeline(new actualRedOpenCv.YellowBlobDetectionPipeline());
+        controlHubCam.setPipeline(new RedOpenCv.YellowBlobDetectionPipeline());
 
         controlHubCam.openCameraDevice();
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
@@ -350,70 +516,72 @@ public class actualRedOpenCv extends LinearOpMode {
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
         return distance;
     }
-class YellowBlobDetectionPipeline extends OpenCvPipeline {
-    Mat hsvFrame = new Mat();
-    //        Mat YCrCb = new Mat();
-    Mat hierarchy = new Mat();
-    Mat yellowMask = new Mat();
+    class YellowBlobDetectionPipeline extends OpenCvPipeline {
+        Mat hsvFrame = new Mat();
+        //        Mat YCrCb = new Mat();
+        Mat hierarchy = new Mat();
+        Mat yellowMask = new Mat();
 //        Mat Cr = new Mat();
 
-    @Override
-    public Mat processFrame(Mat input) {
-        // Preprocess the frame to detect yellow regions
-        Mat yellowMask = preprocessFrame(input);
+        @Override
+        public Mat processFrame(Mat input) {
+            // Preprocess the frame to detect yellow regions
+            Mat yellowMask = preprocessFrame(input);
 
-        // Find contours of the detected yellow regions
-        List<MatOfPoint> contours = new ArrayList<>();
+            // Find contours of the detected yellow regions
+            List<MatOfPoint> contours = new ArrayList<>();
 //            Mat hierarchy = new Mat();
-        Imgproc.findContours(yellowMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+            Imgproc.findContours(yellowMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        // Find the largest yellow contour (blob)
-        MatOfPoint largestContour = findLargestContour(contours);
+            // Find the largest yellow contour (blob)
+            MatOfPoint largestContour = findLargestContour(contours);
 
-        if (largestContour != null) {
-            // Draw a red outline around the largest detected object
-            Imgproc.drawContours(input, contours, contours.indexOf(largestContour), new Scalar(255, 0, 0), 2);
-            // Calculate the width of the bounding box
-            width = calculateWidth(largestContour);
+            if (largestContour != null) {
+                // Draw a red outline around the largest detected object
+                Imgproc.drawContours(input, contours, contours.indexOf(largestContour), new Scalar(255, 0, 0), 2);
+                // Calculate the width of the bounding box
+                width = calculateWidth(largestContour);
 
-            // Display the width next to the label
-            String areaLabel = "Area: " + (int) maxArea + "pixels";
-            Imgproc.putText(input, areaLabel, new Point(cX + 10, cY + 40), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
-            String widthLabel = "Width: " + (int) width + " pixels";
-            Imgproc.putText(input, widthLabel, new Point(cX + 10, cY + 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
-            //Display the Distance
-            String distanceLabel = "Distance: " + String.format("%.2f", getDistance(width)) + " inches";
-            Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
-            // Calculate the centroid of the largest contour
-            Moments moments = Imgproc.moments(largestContour);
-            cX = moments.get_m10() / moments.get_m00();
-            cY = moments.get_m01() / moments.get_m00();
+                // Display the width next to the label
+                String areaLabel = "Area: " + (int) maxArea + "pixels";
+                Imgproc.putText(input, areaLabel, new Point(cX + 10, cY + 40), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
+                String widthLabel = "Width: " + (int) width + " pixels";
+                Imgproc.putText(input, widthLabel, new Point(cX + 10, cY + 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
+                //Display the Distance
+                String distanceLabel = "Distance: " + String.format("%.2f", getDistance(width)) + " inches";
+                Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255), 2);
+                // Calculate the centroid of the largest contour
+                Moments moments = Imgproc.moments(largestContour);
+                cX = moments.get_m10() / moments.get_m00();
+                cY = moments.get_m01() / moments.get_m00();
 
-            // Draw a dot at the centroid
-            String label = "(" + (int) cX + ", " + (int) cY + ")";
-            Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
-            Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
+                // Draw a dot at the centroid
+                String label = "(" + (int) cX + ", " + (int) cY + ")";
+                Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
+                Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
+            }
+            if ((int) cX > 180 && (int) cX < 800 && (int)maxArea>12000) {
+                spikeTarget = 2;
+            } else if ((int) cX < 179 && (int)maxArea>12000) {
+                spikeTarget = 1;
+            } else {
+                spikeTarget = 3;
+                telemetry.addData("Else Spike target = 3","Hello world");
+                telemetry.update();
+            }
+
+            return input;
         }
-        if ((int) cX < 600) {
-            spikeTarget = 2;
-        } else if ((int) maxArea > 5000) {
-            spikeTarget = 3;
-        } else {
-            spikeTarget = 1;
-        }
 
-        return input;
-    }
-
-    private Mat preprocessFrame(Mat frame) {
+        private Mat preprocessFrame(Mat frame) {
 //            Mat hsvFrame = new Mat();
-        Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
+            Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
 
 //            Imgproc.cvtColor(frame, YCrCb, Imgproc.COLOR_BGR);
 //        Scalar lowerYellow = new Scalar(100, 100, 100);
 //        Scalar upperYellow = new Scalar(180, 255, 255);
-        Scalar lowerYellow = new Scalar(0, 100, 100);
-        Scalar upperYellow = new Scalar(120, 255, 255);
+            Scalar lowerYellow = new Scalar(100, 100, 100);
+            Scalar upperYellow = new Scalar(180, 255, 255);
 
 //            Scalar lowerRed = new Scalar(0, 0, 0);
 //            Scalar upperRed = new Scalar(255, 255, 255);
@@ -421,36 +589,36 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
 //            Core.extractChannel(YCrCb, Cr, 2);
 
 //            Mat yellowMask = new Mat();
-        Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
+            Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
 
-        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-        Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_OPEN, kernel);
-        Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_CLOSE, kernel);
+            Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_OPEN, kernel);
+            Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_CLOSE, kernel);
 
-        return yellowMask;
-    }
-
-    private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
-        MatOfPoint largestContour = null;
-        maxArea = 0;
-
-        for (MatOfPoint contour : contours) {
-            double area = Imgproc.contourArea(contour);
-            if (area > maxArea) {
-                maxArea = area;
-                largestContour = contour;
-            }
+            return yellowMask;
         }
 
-        return largestContour;
-    }
+        private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
+            MatOfPoint largestContour = null;
+            maxArea = 0;
 
-    private double calculateWidth(MatOfPoint contour) {
-        Rect boundingRect = Imgproc.boundingRect(contour);
-        return boundingRect.width;
-    }
+            for (MatOfPoint contour : contours) {
+                double area = Imgproc.contourArea(contour);
+                if (area > maxArea) {
+                    maxArea = area;
+                    largestContour = contour;
+                }
+            }
 
-}
+            return largestContour;
+        }
+
+        private double calculateWidth(MatOfPoint contour) {
+            Rect boundingRect = Imgproc.boundingRect(contour);
+            return boundingRect.width;
+        }
+
+    }
 
 
 
