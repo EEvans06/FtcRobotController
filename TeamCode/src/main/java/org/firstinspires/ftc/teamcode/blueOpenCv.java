@@ -299,12 +299,71 @@ public class blueOpenCv extends LinearOpMode {
                             0, 0, 0, 0, 0, 5.0);//turn right
                     order = 4;
                 }
-                encoderDrive(DRIVE_SPEED, 18, 18, 18, 18,
+                topClaw.setPosition(.8);
+                encoderDrive(DRIVE_SPEED, -18, -18, -18, -18,
                         0, 0, 0, 0, 0, 5.0);//Forward
+                while (order == 4 && opModeIsActive()){
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
+                    order = 5;
+                }
+                topClaw.setPosition(1);
+                botClaw.setPosition(1);
+                sleep(1000);
+                topClaw.setPosition(.8);
+                botClaw.setPosition(.8);
 
-            } else if (order==4){
-                telemetry.addData("Hello", "I'm in order 2");
-                telemetry.update();
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                while(order == 5){
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            -917, -934, -670, 0.3, .2, 5.0);//lower slides and forbar
+                }
+
+            }
+            else if (spikeTarget == 3 && order==0){
+                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                        0, 0, 0, 0, 0, 5.0);//Drive forward
+                encoderDrive(TURN_SPEED, 16, -16, 16, -16,
+                        0, 0, 0, 0, 0, 5.0);//Turn 90 degrees to the right
+                encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
+                        0, 0, 0, 0, 0, 5.0);//Drive forward
+                topClaw.setPosition(1);//Opening bottom claw to release PP
+                order = 1;
+
+                while (order == 1 && opModeIsActive()){
+                    encoderDrive(DRIVE_SPEED, -23, -23, -23, -23,
+                            0, 0, 210, 0, .3, 5.0);//Raise the forebar to release the PP
+                    topClaw.setPosition(.8);
+                    //as well as move backwards to board
+                    sleep(500);
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
+                    order = 2;
+                }
+                topClaw.setPosition(1);
+                botClaw.setPosition(1);
+
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                while (order == 2 && opModeIsActive()){
+                    topClaw.setPosition(.8);
+                    botClaw.setPosition(.8);
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            -917, -934, -670, 0.3, .2, 5.0);//lower slides and forbar
+                }
             }
         }
         controlHubCam.stopStreaming();
