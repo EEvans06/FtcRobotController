@@ -115,7 +115,7 @@ public class blueOpenCv extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
-    private double order = 0;
+    private double  order = 0;
 
 
     // New variables for OpenCV
@@ -131,7 +131,7 @@ public class blueOpenCv extends LinearOpMode {
     public static final double objectWidthInRealWorldUnits = 3.375;  // Replace with the actual width of the object in real-world units
     public static final double focalLength = 1431.11;  // Replace with the focal length of the camera in pixels
 
-    double spikeTarget = 0;
+    double spikeTarget = 3;
     public double maxArea = 0;
 
     @Override
@@ -202,104 +202,112 @@ public class blueOpenCv extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        while(opModeIsActive()) {
+            telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+            telemetry.addData("Distance in Inch", (getDistance(width)));
+            telemetry.addData("cX is equal to", cX);
+            telemetry.addData("maxArea is equal to", maxArea);
+        //            telemetry.update();
+            double distance = getDistance(width);
 
-        telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
-        telemetry.addData("Distance in Inch", (getDistance(width)));
-        telemetry.addData("cX is equal to", cX);
-        telemetry.addData("maxArea is equal to", maxArea);
-//            telemetry.update();
-        double distance = getDistance(width);
+            telemetry.addData("Spike Target", spikeTarget);
 
-        telemetry.addData("Spike Target", spikeTarget);
-
-        telemetry.update();
-
-
-        controlHubCam.stopStreaming();
-
-        telemetry.addData("Spike Target", spikeTarget);
-
-        telemetry.update();
+            telemetry.update();
 
 
-        controlHubCam.stopStreaming();
+            controlHubCam.stopStreaming();
 
-        if (spikeTarget == 1){
-            encoderDrive(DRIVE_SPEED,  -23,  23, 23, -23,
-                    0, 0, 0, 0, 0, 5.0);//strafe left
-            encoderDrive(DRIVE_SPEED,  23,  23, 23, 23,
-                    0, 0, 0, 0, 0, 5.0);//forward
-            encoderDrive(TURN_SPEED,  -18,  18, -18, 18,
-                    0, 0, 0, 0, 0, 5.0);//turn right
-            encoderDrive(DRIVE_SPEED,  2,  2, 2, 2,
-                    0, 0, 0, 0, 0, 5.0);//forward
-            topClaw.setPosition(1);
-            order = 1;
-            while (order == 1 && opModeIsActive()){
-                encoderDrive(DRIVE_SPEED,  -13,  -13, -13, -13,
-                        0, 0, 143, 0, 0.3, 5.0);
-                order = 0;
-                sleep(1000);
-                topClaw.setPosition(.8);
-                break;
-            }
-            rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            telemetry.addData("Spike Target", spikeTarget);
 
-            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            telemetry.update();
 
-            encoderDrive(DRIVE_SPEED,  14,  -14, -14, 14,
-                    0, 0, 0, 0, 0, 5.0);//strafe left
-            order = 2;
-            while (order == 2 && opModeIsActive()) {
-                encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
-                        925, 943, 696, 0.3, 0.2, 5.0);
-                order = 0;
-                break;
-            }
-            topClaw.setPosition(1);
-            botClaw.setPosition(1);
 
-            rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            topClaw.setPosition(0.8);
-            botClaw.setPosition(0.8);
+            if (spikeTarget == 1&&order==0) {
+                encoderDrive(DRIVE_SPEED, -20, 20, 20, -20,
+                        0, 0, 0, 0, 0, 5.0);//strafe left
+                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                        0, 0, 0, 0, 0, 5.0);//forward
+                encoderDrive(TURN_SPEED, -16, 16, -16, 16,
+                        0, 0, 0, 0, 0, 5.0);//turn right
+                encoderDrive(DRIVE_SPEED, 3, 3, 3, 3,
+                        0, 0, 0, 0, 0, 5.0);//forward
+                topClaw.setPosition(1);
+                order = 1;
+                while (order == 1 && opModeIsActive()) {
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            0, 0, 210, 0, 0.3, 5.0);
+                    encoderDrive(DRIVE_SPEED, -10, -10, -10, -10,
+                            0, 0, 0, 0, 0, 5.0);
 
-            order = 3;
-            while (order == 3 && opModeIsActive()) {
+                    sleep(1000);
+                    topClaw.setPosition(.8);
+                    order = 2;
+                }
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                encoderDrive(DRIVE_SPEED, 13, -13, -13, 13,
+                        0, 0, 0, 0, 0, 5.0); //strafe left
+
+                while (order == 2 && opModeIsActive()) {
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            830, 910, 850, 0.3, 0.2, 5.0);
+                    order = 3;
+                }
+                topClaw.setPosition(1);
+                botClaw.setPosition(1);
+
+                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
                 topClaw.setPosition(0.8);
                 botClaw.setPosition(0.8);
-                encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
-                        -917, -934, -670, 0.3, .2, 5.0);
-                order = 0;
-                break;
-            }
 
-        }
-        else if (spikeTarget == 2){
-            encoderDrive(DRIVE_SPEED,  -23,  23, 23, -23,
-                    0, 0, 0, 0, 0, 5.0);//Forward
-            topClaw.setPosition(1);
-            order = 1;
-            while (order == 1 && opModeIsActive()){
-                encoderDrive(DRIVE_SPEED,  0,  0, 0, 0,
-                        0, 0, 140, 0, .2, 5.0);//raise forebar
-                encoderDrive(DRIVE_SPEED,  -15,  -15, -15, -15,
-                        0, 0, 140, 0, .2, 5.0);//drive backwards
-                order = 0;
-                break;
-            }
+                while (order == 3 && opModeIsActive()) {
+                    topClaw.setPosition(1);
+                    botClaw.setPosition(1);
+                    sleep(1000);
+                    topClaw.setPosition(.8);
+                    botClaw.setPosition(.8);
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            -917, -934, -670, 0.3, .2, 5.0);
+                    order = 4;
+                }
+            } else if (spikeTarget == 2 && order==0) {
+                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                        0, 0, 0, 0, 0, 5.0);//Forward
+                topClaw.setPosition(1);
+                order = 1;
+                while (order == 1 && opModeIsActive()) {
+                    encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
+                            0, 0, 140, 0, .2, 5.0);//raise forebar
+                    encoderDrive(DRIVE_SPEED, -5, -5, -5, -5,
+                            0, 0, 140, 0, .2, 5.0);//drive backwards
+                    encoderDrive(TURN_SPEED, 17, -17, 17, -17,
+                            0, 0, 0, 0, 0, 5.0);//turn right
+                    order = 4;
+                }
+                encoderDrive(DRIVE_SPEED, 18, 18, 18, 18,
+                        0, 0, 0, 0, 0, 5.0);//Forward
 
+            } else if (order==4){
+                telemetry.addData("Hello", "I'm in order 2");
+                telemetry.update();
+            }
         }
+        controlHubCam.stopStreaming();
     }
 
 
@@ -493,12 +501,14 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
             Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
         }
-        if ((int) cX > 180 && (int) cX < 750) {
+        if ((int) cX > 180 && (int) cX < 800 && (int)maxArea>12000) {
             spikeTarget = 2;
-        } else if ((int) cX < 180) {
+        } else if ((int) cX < 179 && (int)maxArea>12000) {
             spikeTarget = 1;
         } else {
             spikeTarget = 3;
+            telemetry.addData("Else Spike target = 3","Hello world");
+            telemetry.update();
         }
 
         return input;
