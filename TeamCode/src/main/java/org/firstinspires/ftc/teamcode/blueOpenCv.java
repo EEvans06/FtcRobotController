@@ -560,9 +560,9 @@ class YellowBlobDetectionPipeline extends OpenCvPipeline {
             Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
         }
-        if ((int) cX > 180 && (int) cX < 800 && (int)maxArea>12000) {
+        if ((int) cX > 505 && (int) cX < 800 && (int)maxArea>12000) {
             spikeTarget = 2;
-        } else if ((int) cX < 300 && (int)maxArea>12000) {
+        } else if ((int) cX < 505 && (int)maxArea>12000) {
             spikeTarget = 1;
         } else {
             spikeTarget = 3;
