@@ -29,13 +29,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -68,9 +65,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="this moves the robot", group="Linear OpMode")
+@TeleOp(name="MiniBot OmniOpMode", group="Linear OpMode")
 //@Disabled
-public class OmniOpMode extends LinearOpMode {
+public class MiniBotOmniOpMode extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
@@ -79,15 +76,15 @@ public class OmniOpMode extends LinearOpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
 
-    private DcMotor rightSlide = null;
-    private DcMotor leftSlide = null;
-
-    private DcMotor forebar = null;
-//    private Servo leftForebar = null;
-
-    private Servo topClaw = null;
-    private Servo botClaw = null;
-    private Servo drone = null;
+//    private DcMotor rightSlide = null;
+//    private DcMotor leftSlide = null;
+//
+//    private DcMotor forebar = null;
+////    private Servo leftForebar = null;
+//
+//    private Servo topClaw = null;
+//    private Servo botClaw = null;
+//    private Servo drone = null;
 
     double motorMode = 0;
 
@@ -108,27 +105,27 @@ public class OmniOpMode extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "motorFrontRight");// CH Port: 1
         rightBackDrive = hardwareMap.get(DcMotor.class, "motorBackRight");  // CH Port: 3
 
-        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
-        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
-
-        forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
-//        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
-
-        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
-        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
-        drone = hardwareMap.get(Servo.class, "drone"); //EH Port 4
-
-        forebar.setDirection(DcMotor.Direction.FORWARD);
-
-        forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.addData("Starting at", forebar.getCurrentPosition());
-
-        telemetry.update();
+//        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");  // EH Port: 1
+//        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");  // EH Port: 0
+//
+//        forebar = hardwareMap.get(DcMotor.class, "forebar"); // CH Port: 0
+////        leftForebar = hardwareMap.get(Servo.class, "left_forebar");
+//
+//        topClaw = hardwareMap.get(Servo.class, "topClaw");   // EH Port: 2
+//        botClaw = hardwareMap.get(Servo.class, "bottomClaw");   // EH Port: 3
+//        drone = hardwareMap.get(Servo.class, "drone"); //EH Port 4
+//
+//        forebar.setDirection(DcMotor.Direction.FORWARD);
+//
+//        forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        telemetry.addData("Starting at", forebar.getCurrentPosition());
+//
+//        telemetry.update();
         //int maxPosition = (int)(COUNTS_PER_DEGREE *45);
 
         // ########################################################################################
@@ -145,18 +142,18 @@ public class OmniOpMode extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        rightSlide.setDirection(DcMotor.Direction.FORWARD);
-        leftSlide.setDirection(DcMotor.Direction.REVERSE);
-
-        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        rightSlide.setDirection(DcMotor.Direction.FORWARD);
+//        leftSlide.setDirection(DcMotor.Direction.REVERSE);
+//
+//        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 //        forebar.setDirection(DcMotor.Direction.FORWARD);
 //        forebar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -165,12 +162,12 @@ public class OmniOpMode extends LinearOpMode {
 //        rightForebar.setPosition(0);
 //        leftForebar.setPosition(0);
 
-        topClaw.setDirection(Servo.Direction.REVERSE);
-        botClaw.setDirection(Servo.Direction.FORWARD);
-        drone.setDirection(Servo.Direction.FORWARD);
-        drone.setPosition(.5);
-        topClaw.setPosition(.8);
-        botClaw.setPosition(.8);
+//        topClaw.setDirection(Servo.Direction.REVERSE);
+//        botClaw.setDirection(Servo.Direction.FORWARD);
+//        drone.setDirection(Servo.Direction.FORWARD);
+//        drone.setPosition(.5);
+//        topClaw.setPosition(.8);
+//        botClaw.setPosition(.8);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -231,18 +228,18 @@ public class OmniOpMode extends LinearOpMode {
                 leftBackPower /= max;
                 rightBackPower /= max;
             }
-
-            // Arm control
-            if (gamepad2.dpad_down) {
-                leftSlide.setPower(0.5);
-                rightSlide.setPower(0.5);
-            } else if (gamepad2.dpad_up) {
-                leftSlide.setPower(-0.5);
-                rightSlide.setPower(-0.5);
-            } else {
-                leftSlide.setPower(0);
-                rightSlide.setPower(0);
-            }
+//
+//            // Arm control
+//            if (gamepad2.dpad_down) {
+//                leftSlide.setPower(0.5);
+//                rightSlide.setPower(0.5);
+//            } else if (gamepad2.dpad_up) {
+//                leftSlide.setPower(-0.5);
+//                rightSlide.setPower(-0.5);
+//            } else {
+//                leftSlide.setPower(0);
+//                rightSlide.setPower(0);
+//            }
 
             // Forebar control
 //            if (gamepad2.dpad_right && forebar.getCurrentPosition() < 660) {
@@ -277,46 +274,46 @@ public class OmniOpMode extends LinearOpMode {
 //                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //             }
 
-              if (gamepad2.right_bumper || gamepad2.dpad_right) {
-                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
-                 forebar.setPower(.3);
-//                 if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
-//                     topClaw.setPosition(.8);
-//                     botClaw.setPosition(.8);
-//                 }
-             }
-
-             else if (gamepad2.left_bumper || gamepad2.dpad_left) {
-                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                forebar.setDirection(DcMotorSimple.Direction.FORWARD);
-                forebar.setPower(.3);
-                  if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
-                      topClaw.setPosition(.8);
-                      botClaw.setPosition(.8);
-                  }
-             }
-              else if (gamepad2.left_trigger != 0) {
-                  forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                  forebar.setDirection(DcMotorSimple.Direction.FORWARD);
-                  forebar.setPower(.3);
-              }
-             else {
-                forebar.setPower(0);
-                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                telemetry.addData("Current Position:  ", forebar.getCurrentPosition());
-
-                telemetry.update();
-             }
-
-
-            //            if (gamepad1.dpad_right){
+//              if (gamepad2.right_bumper || gamepad2.dpad_right) {
+//                 forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                 forebar.setDirection(DcMotorSimple.Direction.REVERSE);
+//                 forebar.setPower(.3);
+////                 if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+////                     topClaw.setPosition(.8);
+////                     botClaw.setPosition(.8);
+////                 }
+//             }
+//
+//             else if (gamepad2.left_bumper || gamepad2.dpad_left) {
+//                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                forebar.setDirection(DcMotorSimple.Direction.FORWARD);
+//                forebar.setPower(.3);
+//                  if (topClaw.getPosition() == 1 && botClaw.getPosition() == 1) {
+//                      topClaw.setPosition(.8);
+//                      botClaw.setPosition(.8);
+//                  }
+//             }
+//              else if (gamepad2.left_trigger != 0) {
+//                  forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                  forebar.setDirection(DcMotorSimple.Direction.FORWARD);
+//                  forebar.setPower(.3);
+//              }
+//             else {
+//                forebar.setPower(0);
+//                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                forebar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                telemetry.addData("Current Position:  ", forebar.getCurrentPosition());
+//
+//                telemetry.update();
+//             }
+//
+//
+//            if (gamepad1.dpad_right){
+////                drone.setPosition(0.5);
+////            }
+//            if (gamepad1.dpad_left){
 //                drone.setPosition(0);
 //            }
-            if (gamepad1.dpad_left){
-                drone.setPosition(0);
-            }
 
             //////Motor Control//////
 
@@ -360,28 +357,28 @@ public class OmniOpMode extends LinearOpMode {
 //            }
 
                 // Claw control
-                if (gamepad2.x) {
-                    botClaw.setPosition(1);
-                    topClaw.setPosition(1);
-                } else if (gamepad2.b) {
-                    botClaw.setPosition(.8);
-                    topClaw.setPosition(.8);
-                } else if (gamepad2.y) {
-                    botClaw.setPosition(1);
-                } else if (gamepad2.a) {
-                    topClaw.setPosition(1);
-                }
-
-                ////Reset encoder////
-            if (gamepad2.right_trigger != 0) {
-                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
+//                if (gamepad2.x) {
+//                    botClaw.setPosition(1);
+//                    topClaw.setPosition(1);
+//                } else if (gamepad2.b) {
+//                    botClaw.setPosition(.8);
+//                    topClaw.setPosition(.8);
+//                } else if (gamepad2.y) {
+//                    botClaw.setPosition(1);
+//                } else if (gamepad2.a) {
+//                    topClaw.setPosition(1);
+//                }
+//
+//                ////Reset encoder////
+//            if (gamepad2.right_trigger != 0) {
+//                leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                forebar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//                leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            }
 
                 // Send calculated power to wheels
                 if (gamepad1.left_bumper) {
@@ -404,11 +401,11 @@ public class OmniOpMode extends LinearOpMode {
                     rightBackDrive.setPower(rightBackPower / 1.5);
                 }
 
-                // Show the elapsed game time and wheel power
-                telemetry.addData("Status", "Run Time: " + runtime.toString());
-                telemetry.addData("Forebar Position", forebar.getCurrentPosition());
-                telemetry.addData("leftSlide Position", leftSlide.getCurrentPosition());
-                telemetry.addData("rightSlide Position", rightSlide.getCurrentPosition());
+//                // Show the elapsed game time and wheel power
+//                telemetry.addData("Status", "Run Time: " + runtime.toString());
+//                telemetry.addData("Forebar Position", forebar.getCurrentPosition());
+//                telemetry.addData("leftSlide Position", leftSlide.getCurrentPosition());
+//                telemetry.addData("rightSlide Position", rightSlide.getCurrentPosition());
 
 //            telemetry.addData("Left Slide Position", leftSlide.getCurrentPosition());
 //            telemetry.addData("Right Slide Position", rightSlide.getCurrentPosition());
