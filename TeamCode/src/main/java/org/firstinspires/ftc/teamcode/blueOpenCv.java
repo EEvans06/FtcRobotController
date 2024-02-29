@@ -328,21 +328,29 @@ public class blueOpenCv extends LinearOpMode {
 
             }
             else if (spikeTarget == 3 && order==0){
-                encoderDrive(DRIVE_SPEED, 23, 23, 23, 23,
+                encoderDrive(DRIVE_SPEED, 21, 21, 21, 21,
                         0, 0, 0, 0, 0, 5.0);//Drive forward
-                encoderDrive(TURN_SPEED, 16, -16, 16, -16,
+                encoderDrive(DRIVE_SPEED, 4, 4, 4, 4,
+                        0, 0, 0, 0, 0, 5.0);//Drive forward
+                encoderDrive(TURN_SPEED, -16, 16, -16, 16,
                         0, 0, 0, 0, 0, 5.0);//Turn 90 degrees to the right
-                encoderDrive(DRIVE_SPEED, 5, 5, 5, 5,
-                        0, 0, 0, 0, 0, 5.0);//Drive forward
+
                 topClaw.setPosition(1);//Opening bottom claw to release PP
+                sleep(500);
                 order = 1;
 
                 while (order == 1 && opModeIsActive()){
-                    encoderDrive(DRIVE_SPEED, -23, -23, -23, -23,
+                    encoderDrive(DRIVE_SPEED, -26, -26, -26, -26,
                             0, 0, 210, 0, .3, 5.0);//Raise the forebar to release the PP
                     topClaw.setPosition(.8);
                     //as well as move backwards to board
                     sleep(500);
+                    encoderDrive(DRIVE_SPEED, -3, 3, -3, 3,
+                            0, 0, 0, 0, 0, 5.0);//Straighten up
+                    encoderDrive(DRIVE_SPEED, -6, 6, 6, -6,
+                            0, 0, 0, 0, 0, 5.0); //strafe left
+                    encoderDrive(DRIVE_SPEED, -3, -3, -3, -3,
+                            0, 0, 0, 0, 0, 5.0);
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                             830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
                     order = 2;
@@ -359,6 +367,7 @@ public class blueOpenCv extends LinearOpMode {
                 forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                 while (order == 2 && opModeIsActive()){
+                    sleep(1000);
                     topClaw.setPosition(.8);
                     botClaw.setPosition(.8);
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
