@@ -252,6 +252,8 @@ public class blueOpenCv extends LinearOpMode {
                 rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 forebar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                encoderDrive(DRIVE_SPEED, -3, 0, -3, 0,
+                        0, 0, 0, 0, 0, 5.0);//Straighten up
 
                 encoderDrive(DRIVE_SPEED, 13, -13, -13, 13,
                         0, 0, 0, 0, 0, 5.0); //strafe left
@@ -300,7 +302,7 @@ public class blueOpenCv extends LinearOpMode {
                     order = 4;
                 }
                 topClaw.setPosition(.8);
-                encoderDrive(DRIVE_SPEED, -18, -18, -18, -18,
+                encoderDrive(DRIVE_SPEED, -25, -25, -25, -25,
                         0, 0, 0, 0, 0, 5.0);//Forward
                 while (order == 4 && opModeIsActive()){
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
@@ -330,8 +332,8 @@ public class blueOpenCv extends LinearOpMode {
             else if (spikeTarget == 3 && order==0){
                 encoderDrive(DRIVE_SPEED, 21, 21, 21, 21,
                         0, 0, 0, 0, 0, 5.0);//Drive forward
-                encoderDrive(DRIVE_SPEED, 4, 4, 4, 4,
-                        0, 0, 0, 0, 0, 5.0);//Drive forward
+//                encoderDrive(DRIVE_SPEED, 4, 4, 4, 4,
+//                        0, 0, 0, 0, 0, 5.0);//Drive forward
                 encoderDrive(TURN_SPEED, -16, 16, -16, 16,
                         0, 0, 0, 0, 0, 5.0);//Turn 90 degrees to the right
 
