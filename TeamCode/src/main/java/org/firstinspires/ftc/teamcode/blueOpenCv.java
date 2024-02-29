@@ -354,6 +354,7 @@ public class blueOpenCv extends LinearOpMode {
                     encoderDrive(DRIVE_SPEED, 0, 0, 0, 0,
                             830, 910, 850, 0.3, 0.2, 5.0);//Raise slides and forebar to the board
                     order = 2;
+                    //apples
                 }
                 topClaw.setPosition(1);
                 botClaw.setPosition(1);
